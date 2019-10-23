@@ -4,7 +4,7 @@ namespace ant\file\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use common\helpers\DateTime;
+use ant\helpers\DateTime;
 use ant\user\models\User;
 use ant\file\models\Folder;
 
@@ -31,11 +31,11 @@ class File extends ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class' => \common\behaviors\TimeStampBehavior::className(),
+				'class' => \ant\behaviors\TimeStampBehavior::className(),
 				'updatedAtAttribute' => null,
 			],
 			[
-				'class' => \common\behaviors\EventHandlerBehavior::className(),
+				'class' => \ant\behaviors\EventHandlerBehavior::className(),
 				'events' => [
 					ActiveRecord::EVENT_BEFORE_VALIDATE => [$this, 'beforeValidateModel'],
 				],

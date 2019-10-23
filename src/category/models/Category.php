@@ -88,14 +88,14 @@ class Category extends ActiveRecord
     public function behaviors()
     {
         $behaviors = [
-            \common\behaviors\TimestampBehavior::className(),
+            \ant\behaviors\TimestampBehavior::className(),
             [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'immutable' => true
             ],
 			'configurable' => [
-				'class' => 'common\behaviors\ConfigurableModelBehavior',
+				'class' => 'ant\behaviors\ConfigurableModelBehavior',
 			],
             // [
             //     'class' => \trntv\filekit\behaviors\UploadBehavior::className(),
@@ -208,7 +208,7 @@ class Category extends ActiveRecord
 	public function getTranslations() {
 		
 		throw new \Exception($this->langClassName.' [ '.$this->langForeignKey.' => '.$this->ownerPrimaryKey.']');
-		return $this->hasMany(\common\models\ArticleCategoryLang::className(), ['master_id' => 'id']);
+		return $this->hasMany(\ant\models\ArticleCategoryLang::className(), ['master_id' => 'id']);
 	}*/
 
     /**

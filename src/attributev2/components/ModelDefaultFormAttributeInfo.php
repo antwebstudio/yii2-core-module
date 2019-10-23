@@ -2,7 +2,7 @@
 namespace ant\attributev2\components;
 
 use yii\base\Component;
-use common\helpers\ArrayHelper;
+use ant\helpers\ArrayHelper;
 use kartik\builder\Form;
 
 class ModelDefaultFormAttributeInfo extends Component

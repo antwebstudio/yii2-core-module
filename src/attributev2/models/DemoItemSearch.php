@@ -4,7 +4,7 @@ namespace ant\attributev2\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 Use ant\attributev2\models\DemoItem;
-use common\behaviors\AttachBehaviorBehavior;
+use ant\behaviors\AttachBehaviorBehavior;
 
 class DemoItemSearch extends DemoItem
 {

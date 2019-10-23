@@ -1,5 +1,5 @@
 <?php
-use common\widgets\ActiveForm;
+use ant\widgets\ActiveForm;
 
 use ant\dynamicform\widgets\DynamicForm;
 use ant\dynamicform\models\fieldtypes\Paragraph;

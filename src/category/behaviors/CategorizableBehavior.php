@@ -32,7 +32,7 @@ class CategorizableBehavior extends Behavior
 				'relations' => [
 					$name.'_ids' => [$name, 'updater' => [
 						'viaTableAttributesValue' => [
-							'model_class_id' => \common\models\ModelClass::getClassId((get_class($owner))),
+							'model_class_id' => \ant\models\ModelClass::getClassId((get_class($owner))),
 							'category_type_id' => $this->getTypeId(),
 						],
 						
@@ -58,7 +58,7 @@ class CategorizableBehavior extends Behavior
 	$query = $this->owner->hasMany(Category::className(), ['id' => 'category_id'])
 		->viaTable('{{%category_map}}', ['model_id' => 'id'], function ($query) use ($categoryType) {
 			$conditions = [
-				'{{%category_map}}.model_class_id' => \common\models\ModelClass::getClassId(get_class($this->owner)),
+				'{{%category_map}}.model_class_id' => \ant\models\ModelClass::getClassId(get_class($this->owner)),
 			];
 			
 			if ($categoryType != '*' && isset($categoryType)) {

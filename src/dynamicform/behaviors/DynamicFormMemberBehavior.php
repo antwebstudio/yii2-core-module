@@ -18,7 +18,7 @@ class DynamicFormMemberBehavior extends Behavior
 	public function attach($owner) {
 		parent::attach($owner);
 		
-		// May cause common\behaviors\RuleBehavior not working properly as isAttributeSafe will access rules() method before the RuleBehavior have needed attribute value to decide rules.
+		// May cause ant\behaviors\RuleBehavior not working properly as isAttributeSafe will access rules() method before the RuleBehavior have needed attribute value to decide rules.
 		//if (!$owner->isAttributeSafe('dynamicFieldForm')) {
 			//throw new \Exception('Please add "dynamicFieldForm" attribute as safe attribute to "'.$owner::className().'" in order to use this behavior. ');
 		//}

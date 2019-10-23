@@ -4,8 +4,8 @@ namespace ant\attribute\behaviors;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 
-use common\helpers\ArrayHelper;
-use common\components\AttributeExpression;
+use ant\helpers\ArrayHelper;
+use ant\attribute\AttributeExpression;
 use ant\attribute\models\Attribute;
 use ant\attribute\models\AttributeGroup;
 use ant\attribute\models\CustomAttribute;

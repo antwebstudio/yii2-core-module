@@ -21,7 +21,7 @@ class AttachmentBehaviorCest
 						'path' => $this->basePath,
 					],
 					/*'as log' => [
-						'class' => 'common\behaviors\FileStorageLogBehavior',
+						'class' => 'ant\behaviors\FileStorageLogBehavior',
 						'component' => 'fileStorage'
 					]*/
 				],

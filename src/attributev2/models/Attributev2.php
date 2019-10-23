@@ -4,9 +4,9 @@ namespace ant\attributev2\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use common\behaviors\TimestampBehavior;
-use common\behaviors\SerializeBehavior;
-use common\behaviors\DefaultValueBehavior;
+use ant\behaviors\TimestampBehavior;
+use ant\behaviors\SerializeBehavior;
+use ant\behaviors\DefaultValueBehavior;
 use ant\attributev2\components\FieldType;
 
 /**

@@ -5,7 +5,7 @@ namespace ant\file\models;
 use Yii;
 use yii\db\ActiveRecord;
 
-use common\behaviors\TimestampBehavior;
+use ant\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%file_storage_item}}".
@@ -38,7 +38,7 @@ class FileStorageItem extends ActiveRecord
                 'updatedAtAttribute' => false
             ],
             [
-                'class' => \common\behaviors\IpBehavior::className(),
+                'class' => \ant\behaviors\IpBehavior::className(),
 				'createdIpAttribute' => 'upload_ip',
 				'updatedIpAttribute' => 'upload_ip',
             ]

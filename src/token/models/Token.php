@@ -5,11 +5,11 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
-use common\helpers\DateTime;
+use ant\helpers\DateTime;
 use ant\user\models\User;
 use ant\token\models\query\TokenQuery;
-use common\interfaces\Expirable;
-use common\behaviors\TimestampBehavior;
+use ant\interfaces\Expirable;
+use ant\behaviors\TimestampBehavior;
 use ant\cart\models\Cart;
 use ant\user\models\UserInvite;
 

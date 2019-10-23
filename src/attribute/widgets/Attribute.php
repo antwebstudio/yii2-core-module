@@ -63,7 +63,7 @@ class Attribute extends InputWidget
 		Modal::end();
 		$modal = ob_get_clean();
 		// make modal outside the current form, prevent nested form happen.
-		$this->view->registerJs('jQuery(function($) { $("body").append(\'' . \common\helpers\ScriptHelper::jsOneLineString($modal) . '\') });');
+		$this->view->registerJs('jQuery(function($) { $("body").append(\'' . \ant\helpers\ScriptHelper::jsOneLineString($modal) . '\') });');
 
 		$html = '';
 

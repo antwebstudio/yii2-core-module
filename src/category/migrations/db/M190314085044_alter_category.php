@@ -5,7 +5,7 @@ namespace ant\category\migrations\db;
 use yii\db\Migration;
 use yii\db\Query;
 use yii\helpers\Inflector;
-use common\helpers\ArrayHelper;
+use ant\helpers\ArrayHelper;
 
 /**
  * Class M190314085044_alter_category

@@ -3,7 +3,7 @@
 namespace ant\attribute\behaviors;
 
 use yii\db\ActiveRecord;
-use common\models\ModelClass;
+use ant\models\ModelClass;
 use ant\dynamicform\models\DynamicField;
 use ant\dynamicform\models\DynamicForm;
 use ant\dynamicform\models\DynamicFormData;
@@ -61,10 +61,10 @@ class DynamicAttribute extends \yii\base\Behavior {
 	
 	public function getDynamicForm() {
 		//throw new \Exception($this->relation);
-		//throw new \Exception(\common\models\ModelClass::getClassId($this->relationModelClass));
+		//throw new \Exception(\ant\models\ModelClass::getClassId($this->relationModelClass));
 		return $this->owner->hasOne(DynamicForm::class, ['model_id' => 'id'])
 			->via($this->relation)
-			->onCondition(['model_class_id' => \common\models\ModelClass::getClassId($this->relationModelClass)]);
+			->onCondition(['model_class_id' => \ant\models\ModelClass::getClassId($this->relationModelClass)]);
 	}
 	
 	public function getDynamicFieldMap() {

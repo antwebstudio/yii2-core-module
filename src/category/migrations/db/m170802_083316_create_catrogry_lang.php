@@ -2,7 +2,7 @@
 
 namespace ant\category\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 class m170802_083316_create_catrogry_lang extends Migration
 {
     public function safeUp()

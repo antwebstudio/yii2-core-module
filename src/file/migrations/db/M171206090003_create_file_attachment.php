@@ -2,7 +2,7 @@
 
 namespace ant\file\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 
 class M171206090003_create_file_attachment extends Migration
 {

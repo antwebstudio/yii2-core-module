@@ -60,7 +60,7 @@ use ant\dynamicform\base\FieldTypes;
     </div>
 </div>
 
-<?php \common\widgets\JsBlock::begin() ?>
+<?php \ant\widgets\JsBlock::begin() ?>
 <script>
 (function(){
     var widget = $('#<?=$widgetId;?>widget-dynamic-form');
@@ -99,4 +99,4 @@ use ant\dynamicform\base\FieldTypes;
     <?php endif; ?>
 }());
 </script>
-<?php \common\widgets\JsBlock::end() ?>
+<?php \ant\widgets\JsBlock::end() ?>

@@ -4,7 +4,7 @@ namespace ant\attribute\models;
 
 use Yii;
 
-use common\helpers\ArrayHelper;
+use ant\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "em_attribute_group".

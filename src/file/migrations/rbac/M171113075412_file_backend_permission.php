@@ -3,8 +3,8 @@
 namespace ant\file\migrations\rbac;
 
 use yii\db\Schema;
-use common\rbac\Migration;
-use common\rbac\Role;
+use ant\rbac\Migration;
+use ant\rbac\Role;
 use backend\modules\file\controllers\FolderController;
 use backend\modules\file\controllers\FileController;
 

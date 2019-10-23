@@ -18,18 +18,18 @@ class Module extends \yii\base\Module
 	public function behaviors() {
 		return [
 			'configurable' => [
-				'class' => 'common\behaviors\ConfigurableModuleBehavior',
+				'class' => 'ant\behaviors\ConfigurableModuleBehavior',
 				'formModels' => [
 					'default' => [
 						'class' => 'ant\category\models\Category',
 						'as field' => [
-							'class' => 'common\behaviors\ConfigurableModelBehavior',
+							'class' => 'ant\behaviors\ConfigurableModelBehavior',
 						],
 					],
 					'product' => [
 						'class' => 'ant\category\models\Category',
 						'as field' => [
-							'class' => 'common\behaviors\ConfigurableModelBehavior',
+							'class' => 'ant\behaviors\ConfigurableModelBehavior',
 						],
 					],
 				],

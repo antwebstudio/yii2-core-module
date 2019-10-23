@@ -35,16 +35,16 @@ class DynamicFormData extends \yii\db\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class'=> \common\behaviors\EventHandlerBehavior::className(),
+				'class'=> \ant\behaviors\EventHandlerBehavior::className(),
 				'events' => [
 					self::EVENT_BEFORE_UPDATE => [$this, 'beforeUpdate'],
 					self::EVENT_BEFORE_INSERT => [$this, 'beforeInsert'],
 				],
 			],
 			[
-                'class' => \common\behaviors\SerializeBehavior::className(),
+                'class' => \ant\behaviors\SerializeBehavior::className(),
                 'attributes' => ['value_json'],
-				'serializeMethod' => \common\behaviors\SerializeBehavior::METHOD_JSON
+				'serializeMethod' => \ant\behaviors\SerializeBehavior::METHOD_JSON
 			]
 		];
 	}

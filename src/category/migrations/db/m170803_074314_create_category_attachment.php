@@ -1,7 +1,7 @@
 <?php
 namespace ant\category\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 class m170803_074314_create_category_attachment extends Migration
 {
     public function safeUp()

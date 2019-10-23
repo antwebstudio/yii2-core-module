@@ -2,7 +2,7 @@
 namespace ant\dynamicform\models;
 
 use yii\db\ActiveRecord;
-use common\behaviors\TimestampBehavior;
+use ant\behaviors\TimestampBehavior;
 use ant\dynamicform\models\DynamicField;
 
 class DynamicForm extends ActiveRecord

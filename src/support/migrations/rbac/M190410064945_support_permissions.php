@@ -3,8 +3,8 @@
 namespace ant\support\migrations\rbac;
 
 use yii\db\Schema;
-use common\rbac\Migration;
-use common\rbac\Role;
+use ant\rbac\Migration;
+use ant\rbac\Role;
 
 class M190410064945_support_permissions extends Migration
 {

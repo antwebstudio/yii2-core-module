@@ -1,8 +1,7 @@
 <?php
 namespace ant\attribute\behaviors;
 
-//use common\components\AttributeExpression;
-use common\helpers\ArrayHelper;
+use ant\helpers\ArrayHelper;
 use ant\attribute\components\AttributeExpression;
 use ant\attribute\exceptions\ParseException;
 

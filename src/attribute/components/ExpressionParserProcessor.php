@@ -2,7 +2,7 @@
 
 namespace ant\attribute\components;
 
-use common\helpers\Ison;
+use ant\helpers\Ison;
 
 class ExpressionParserProcessor extends \yii\base\Component {
     public $renderers = null;

@@ -1,7 +1,7 @@
 <?php
 namespace ant\file\models;
 
-use common\helpers\StringHelper;
+use ant\helpers\StringHelper;
 use ant\file\models\File;
 
 class UploadFileForm extends \yii\base\Model {

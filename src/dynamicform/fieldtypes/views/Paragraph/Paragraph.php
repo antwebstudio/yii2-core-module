@@ -1,5 +1,5 @@
 <?php
-use common\widgets\ActiveForm;
+use ant\widgets\ActiveForm;
 ?>
 <?=$form->field($model, 'max')->textInput([
 	'id' => $widgetId . $key . 'setting-textinput-max',

@@ -1,7 +1,7 @@
 <?php
 namespace ant\category\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 use ant\category\models\Category;
 use ant\category\models\CategoryType;
 use Yii;

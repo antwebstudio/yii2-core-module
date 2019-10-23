@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 use ant\attributev2\models\Attributev2;
 use ant\attributev2\components\DynamicAttributeManager;
 use ant\attributev2\components\FormAttributeManager;
-use common\behaviors\SerializeBehavior;
+use ant\behaviors\SerializeBehavior;
 
 class DynamicAttributeBehavior extends Behavior
 {

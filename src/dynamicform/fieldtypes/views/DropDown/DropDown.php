@@ -2,7 +2,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 
-use common\helpers\ScriptHelper;
+use ant\helpers\ScriptHelper;
 ?>
 <div id="<?=$widgetId . $key;?>dynamicfield-dropdown-setting">
 	<?= $form->field($model, 'min')->textInput([
@@ -37,7 +37,7 @@ use common\helpers\ScriptHelper;
 	]) ?>
 </div>
 
-<?php \common\widgets\JsBlock::begin() ?>
+<?php \ant\widgets\JsBlock::begin() ?>
 <script>
 (function(){
 	var dropDownSetting = $('#<?=$widgetId . $key;?>dynamicfield-dropdown-setting');
@@ -68,4 +68,4 @@ use common\helpers\ScriptHelper;
 	<?php if(empty($model->items)): ?>newDropDownItemBtn.trigger('click');<?php endif; ?>
 }());
 </script>
-<?php \common\widgets\JsBlock::end() ?>
+<?php \ant\widgets\JsBlock::end() ?>

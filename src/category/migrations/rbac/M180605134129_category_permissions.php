@@ -3,9 +3,9 @@
 namespace ant\category\migrations\rbac;
 
 use yii\db\Schema;
-use common\rbac\Migration;
-use common\rbac\Permission;
-use common\rbac\Role;
+use ant\rbac\Migration;
+use ant\rbac\Permission;
+use ant\rbac\Role;
 use ant\subscription\models\Subscription;
 
 class M180605134129_category_permissions extends Migration

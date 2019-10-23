@@ -3,8 +3,8 @@ namespace ant\dynamicform\models;
 
 use yii\helpers\Html;
 use yii\db\ActiveRecord;
-use common\behaviors\TimestampBehavior;
-use common\behaviors\SerializeBehavior;
+use ant\behaviors\TimestampBehavior;
+use ant\behaviors\SerializeBehavior;
 use ant\dynamicform\models\DynamicForm;
 use ant\dynamicform\base\FieldTypes;
 
@@ -20,7 +20,7 @@ class DynamicField extends ActiveRecord
 		return 
         [
 			'softDeleteBehavior' => [
-				'class' => \common\behaviors\TrashableBehavior::className(),
+				'class' => \ant\behaviors\TrashableBehavior::className(),
 				'softDeleteAttributeValues' => [
 					'is_deleted' => true
 				],

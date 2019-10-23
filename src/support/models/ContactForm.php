@@ -67,19 +67,19 @@ class ContactForm extends \yii\db\ActiveRecord
         return
         [
 			'configurable' => [
-				'class' => 'common\behaviors\ConfigurableModelBehavior',
+				'class' => 'ant\behaviors\ConfigurableModelBehavior',
 			],
 			[
-				'class' => \common\behaviors\AttachBehaviorBehavior::className(),
+				'class' => \ant\behaviors\AttachBehaviorBehavior::className(),
                 'config' => '@common/config/behaviors.php',
 			],
 			[
-				'class' => \common\behaviors\SerializeBehavior::className(),
-				'serializeMethod' => \common\behaviors\SerializeBehavior::METHOD_JSON,
+				'class' => \ant\behaviors\SerializeBehavior::className(),
+				'serializeMethod' => \ant\behaviors\SerializeBehavior::METHOD_JSON,
 				'attributes' => ['data'],
 			],
 			[
-				'class' => \common\behaviors\SendEmailBehavior::className(),
+				'class' => \ant\behaviors\SendEmailBehavior::className(),
 				'template' => [
 					self::EVENT_AFTER_INSERT => '@common/modules/support/mail/contactRegister',
 				],
@@ -93,10 +93,10 @@ class ContactForm extends \yii\db\ActiveRecord
 				//'throwException' => YII_DEBUG,
 			],
             [
-                'class' => \common\behaviors\TimestampBehavior::className(),
+                'class' => \ant\behaviors\TimestampBehavior::className(),
             ],
             [
-                'class' => \common\behaviors\IpBehavior::className(),
+                'class' => \ant\behaviors\IpBehavior::className(),
 				'updatedIpAttribute' => null,
             ],
         ];

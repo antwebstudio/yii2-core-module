@@ -141,7 +141,7 @@ class GeneralFunction extends \yii\base\Component {
 		$condition = $params['condition'];
 		unset($params['condition']);
 
-		$priceRule = new \common\components\PriceRule($params);
+		$priceRule = new \ant\components\PriceRule($params);
 		return $priceRule->getValue($condition);
 	}
 	*/

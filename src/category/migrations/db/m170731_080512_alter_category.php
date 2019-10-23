@@ -1,7 +1,7 @@
 <?php
 namespace ant\category\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 class m170731_080512_alter_category extends Migration
 {
 	public $tableName = '{{%category}}';

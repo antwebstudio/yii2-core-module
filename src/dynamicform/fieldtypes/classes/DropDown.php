@@ -22,7 +22,7 @@ class DropDown extends FieldTypes
     }
 	
 	public function inputRules() {
-		$rule = ['common\validators\ArrayValidator'];
+		$rule = ['ant\validators\ArrayValidator'];
 		if ($this->min != '') $rule['min'] = $this->min;
 		if ($this->max != '') $rule['max'] = $this->max;
 		

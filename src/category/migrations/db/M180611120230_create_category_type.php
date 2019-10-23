@@ -2,7 +2,7 @@
 
 namespace ant\category\migrations\db;
 
-use common\components\Migration;
+use ant\db\Migration;
 
 class M180611120230_create_category_type extends Migration
 {

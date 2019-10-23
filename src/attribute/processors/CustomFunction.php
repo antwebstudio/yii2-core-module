@@ -2,7 +2,7 @@
 
 namespace ant\attribute\processors;
 
-use common\helpers\Ison;
+use ant\helpers\Ison;
 
 class CustomFunction extends \yii\base\Component {
     public $renderers = null;

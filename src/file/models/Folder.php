@@ -25,7 +25,7 @@ class Folder extends \yii\db\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class' => \common\behaviors\TimeStampBehavior::className(),
+				'class' => \ant\behaviors\TimeStampBehavior::className(),
 				'updatedAtAttribute' => null,
 			]
 		];

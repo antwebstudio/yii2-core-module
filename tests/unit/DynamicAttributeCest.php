@@ -1,7 +1,7 @@
 <?php
 //namespace tests\codeception\common;
 //use tests\codeception\common\UnitTester;
-use common\behaviors\DynamicAttribute;
+use ant\behaviors\DynamicAttribute;
 
 class DynamicAttributeCest
 {

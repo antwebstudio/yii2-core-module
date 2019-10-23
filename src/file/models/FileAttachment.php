@@ -58,14 +58,14 @@ class FileAttachment extends \yii\db\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class' => 'common\behaviors\SerializeBehavior',
-				'serializeMethod' => \common\behaviors\SerializeBehavior::METHOD_JSON,
+				'class' => 'ant\behaviors\SerializeBehavior',
+				'serializeMethod' => \ant\behaviors\SerializeBehavior::METHOD_JSON,
 				'attributes' => ['data'],
 			],
 			[
-				'class' => 'common\behaviors\EventHandlerBehavior',
+				'class' => 'ant\behaviors\EventHandlerBehavior',
 				'events' => [
-					\common\behaviors\DuplicableBehavior::EVENT_AFTER_DUPLICATE => function($event) {
+					\ant\behaviors\DuplicableBehavior::EVENT_AFTER_DUPLICATE => function($event) {
 						$attachment = $event->sender;
 						$attachment->path = Yii::$app->fileStorage->save($attachment->getFullPath());
 						

@@ -1,7 +1,7 @@
 <?php
 namespace ant\file\behaviors;
 
-use common\helpers\File;
+use ant\helpers\File;
 
 class UploadBehavior extends \trntv\filekit\behaviors\UploadBehavior {
 	public function duplicateUploadedFile() {

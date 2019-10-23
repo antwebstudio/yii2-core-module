@@ -21,7 +21,7 @@ abstract class FieldType extends Component
 	{
 		return [
 			[
-				'class' => \common\behaviors\EventHandlerBehavior::className(),
+				'class' => \ant\behaviors\EventHandlerBehavior::className(),
 				'events' => $this->events(),
 			],
 		];

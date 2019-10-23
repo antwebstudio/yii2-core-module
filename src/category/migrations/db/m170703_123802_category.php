@@ -3,7 +3,7 @@ namespace ant\category\migrations\db;
 
 use yii\db\Schema;
 
-use common\components\Migration;
+use ant\db\Migration;
 
 class m170703_123802_category extends Migration
 {

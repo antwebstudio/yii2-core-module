@@ -3,7 +3,7 @@
 namespace ant\file\migrations\db;
 
 use yii\db\Query;
-use common\components\Migration;
+use ant\db\Migration;
 
 class M180630071714_alter_file_attachment extends Migration
 {

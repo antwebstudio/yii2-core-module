@@ -5,7 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\base\UnknownPropertyException;
 
-use common\helpers\ArrayHelper;
+use ant\helpers\ArrayHelper;
 use ant\attribute\models\AttributeGroup;
 use ant\attribute\models\Attribute;
 

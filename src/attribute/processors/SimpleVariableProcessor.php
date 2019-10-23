@@ -2,7 +2,7 @@
 
 namespace ant\attribute\processors;
 
-use common\helpers\Ison;
+use ant\helpers\Ison;
 
 class SimpleVariableProcessor extends \yii\base\Component {
     public $renderers = null;

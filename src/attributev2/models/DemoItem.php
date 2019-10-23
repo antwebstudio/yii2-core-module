@@ -4,8 +4,8 @@ namespace ant\attributev2\models;
 use Yii;
 use yii\db\ActiveRecord;
 use ant\attributev2\traits\DynamicAttributeTrait;
-use common\behaviors\AttachBehaviorBehavior;
-use common\behaviors\DateTimeAttributeBehavior;
+use ant\behaviors\AttachBehaviorBehavior;
+use ant\behaviors\DateTimeAttributeBehavior;
 
 class DemoItem extends ActiveRecord
 {

@@ -1,9 +1,9 @@
 <?php
 namespace category;
 
-use \UnitTester;
+use UnitTester;
 use yii\helpers\ArrayHelper;
-use \ant\category\models\Category;
+use ant\category\models\Category;
 
 class CategorizableBehaviorCest
 {
@@ -141,7 +141,7 @@ class CategorizableBehaviorCest
 	}
 }
 
-class CategorizableBehaviorCestFormModel extends \common\base\FormModel {
+class CategorizableBehaviorCestFormModel extends \ant\base\FormModel {
 	public function models() {
 		return [
 			'sub' => [

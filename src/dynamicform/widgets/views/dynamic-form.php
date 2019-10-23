@@ -31,7 +31,7 @@ use ant\dynamicform\widgets\DynamicForm;
 	])?>
 </div>
 
-<?php \common\widgets\JsBlock::begin(['pos' => View::POS_READY, 'key' => 'widget-dynamic-form' . $this->context->id]) ?>
+<?php \ant\widgets\JsBlock::begin(['pos' => View::POS_READY, 'key' => 'widget-dynamic-form' . $this->context->id]) ?>
 <script>
 (function(){
 
@@ -67,4 +67,4 @@ use ant\dynamicform\widgets\DynamicForm;
 	});
 }());
 </script>
-<?php \common\widgets\JsBlock::end() ?>
+<?php \ant\widgets\JsBlock::end() ?>
