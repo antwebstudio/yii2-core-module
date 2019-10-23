@@ -42,7 +42,7 @@ return [
             'class' => 'ant\moduleManager\components\ModuleManager',
 			'moduleAutoloadPaths' => [
 				'@ant',
-				'@common/modules', 
+				'@ant', 
 				'@vendor/inspirenmy/yii2-ecommerce/src/common/modules', 
 				'@vendor/inspirenmy/yii2-user/src/common/modules',
 				'@vendor/inspirenmy/yii2-core/src/common/modules',

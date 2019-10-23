@@ -22,7 +22,7 @@ class Paragraph extends FieldTypes
 	 */
 	public static function getViewFile()
 	{
-		return '@common/modules/dynamicform/views/Paragraph';
+		return '@ant/dynamicform/views/Paragraph';
 	}
 
 	public function attributeLabels()
@@ -46,4 +46,3 @@ class Paragraph extends FieldTypes
 		];
 	}
 }
-?>

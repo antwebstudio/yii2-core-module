@@ -18,7 +18,7 @@ use ant\helpers\ScriptHelper;
 	<div id="<?=$widgetId . $key;?>dynamicfield-dropdown-setting-items">
 	<b>Items</b>
 	<?php foreach ($model->items as $dropDropItemKey => $value): ?>
-		<?= $this->render('@common/modules/dynamicform/fieldtypes/views/DropDown/DropDownItem', [
+		<?= $this->render('@ant/dynamicform/fieldtypes/views/DropDown/DropDownItem', [
 			'dropDropItemKey' => $dropDropItemKey,
 			'form' => $form,
 			'model' => $model,
@@ -49,7 +49,7 @@ use ant\helpers\ScriptHelper;
 		var btn = $(this);
 		var key = btn.data('key');
 
-		var item = '<?=ScriptHelper::jsOneLineString($this->render('@common/modules/dynamicform/fieldtypes/views/DropDown/DropDownItem', [
+		var item = '<?=ScriptHelper::jsOneLineString($this->render('@ant/dynamicform/fieldtypes/views/DropDown/DropDownItem', [
 			'dropDropItemKey' => '__key__',
 			'form' => $form,
 			'model' => $model,

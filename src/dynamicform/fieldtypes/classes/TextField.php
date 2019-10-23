@@ -50,8 +50,6 @@ class TextField extends FieldTypes
 
     public static function render($params = [])
     {
-        return Yii::$app->view->render('@common/modules/dynamicform/fieldtypes/views/TextField/TextField', $params);
+        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/TextField/TextField', $params);
     }
 }
-
-?>

@@ -9,7 +9,7 @@ use ant\dynamicform\models\DynamicField;
 
 class DynamicFormAction extends Action
 {
-    public $view = '@common/modules/dynamicform/widgets/views/row';
+    public $view = '@ant/dynamicform/widgets/views/row';
 
     private $_actionMap =
     [
@@ -52,4 +52,3 @@ class DynamicFormAction extends Action
         ]);
     }
 }
-?>

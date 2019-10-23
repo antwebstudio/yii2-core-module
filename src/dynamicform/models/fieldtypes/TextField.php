@@ -26,7 +26,7 @@ class TextField extends FieldTypes
 	 */
 	public static function getViewFile()
 	{
-		return '@common/modules/dynamicform/views/TextField';
+		return '@ant/dynamicform/views/TextField';
 	}
 
 	/**
@@ -42,4 +42,3 @@ class TextField extends FieldTypes
 		];
 	}
 }
-?>

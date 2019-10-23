@@ -24,7 +24,7 @@ class Dropdown extends FieldTypes
 	 */
 	public static function getViewFile()
 	{
-		return '@common/modules/dynamicform/views/Dropdown';
+		return '@ant/dynamicform/views/Dropdown';
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Dropdown extends FieldTypes
 	public static function renderItems($params, $isDeleteAble = true, $cleanOutput = false)
 	{
 		$params =  ArrayHelper::merge($params, ['isDeleteAble' => $isDeleteAble]);
-		$output = Yii::$app->view->render('@common/modules/dynamicform/views/DropdownItem', $params);
+		$output = Yii::$app->view->render('@ant/dynamicform/views/DropdownItem', $params);
 		return $cleanOutput ? parent::cleanOutput($output) : $output;
 	}
 
@@ -82,4 +82,3 @@ class Dropdown extends FieldTypes
 		];
 	}
 }
-?>

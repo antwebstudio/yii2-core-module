@@ -44,7 +44,7 @@ class TextInput extends FieldTypes
 	 */
 	public static function getViewFile()
 	{
-		return '@common/modules/dynamicform/views/TextInput';
+		return '@ant/dynamicform/views/TextInput';
 	}
 
 	/**
@@ -61,4 +61,3 @@ class TextInput extends FieldTypes
 		];
 	}
 }
-?>

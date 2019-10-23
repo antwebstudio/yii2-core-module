@@ -57,6 +57,6 @@ class NumberField extends FieldTypes
 
     public static function render($params = [])
     {
-        return Yii::$app->view->render('@common/modules/dynamicform/fieldtypes/views/NumberField/NumberField', $params);
+        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/NumberField/NumberField', $params);
     }
 }

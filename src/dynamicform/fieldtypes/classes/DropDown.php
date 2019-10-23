@@ -67,8 +67,6 @@ class DropDown extends FieldTypes
     {
 		// Use renderAjax will cause the container cannot work properly with bootstrap collapse (is it?)
 		// But use render will cause the "New Item" for DropDownList is not working
-        return Yii::$app->view->renderAjax('@common/modules/dynamicform/fieldtypes/views/DropDown/DropDown', $params);
+        return Yii::$app->view->renderAjax('@ant/dynamicform/fieldtypes/views/DropDown/DropDown', $params);
     }
 }
-
-?>

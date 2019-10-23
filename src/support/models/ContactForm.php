@@ -81,7 +81,7 @@ class ContactForm extends \yii\db\ActiveRecord
 			[
 				'class' => \ant\behaviors\SendEmailBehavior::className(),
 				'template' => [
-					self::EVENT_AFTER_INSERT => '@common/modules/support/mail/contactRegister',
+					self::EVENT_AFTER_INSERT => '@ant/support/mail/contactRegister',
 				],
 				'messageConfig' => [
 					self::EVENT_AFTER_INSERT => [

@@ -5,7 +5,7 @@ namespace ant\file\migrations\rbac;
 use yii\db\Schema;
 use ant\rbac\Migration;
 use ant\rbac\Role;
-use ant\rbac\rule\IsOwnModelRule;
+use ant\rbac\rules\IsOwnModelRule;
 use ant\file\models\File;
 use frontend\modules\file\controllers\FolderController;
 use frontend\modules\file\controllers\FileController;

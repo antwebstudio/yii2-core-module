@@ -49,7 +49,6 @@ class Paragraph extends FieldTypes
 
     public static function render($params = [])
     {
-        return Yii::$app->view->render('@common/modules/dynamicform/fieldtypes/views/Paragraph/Paragraph', $params);
+        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/Paragraph/Paragraph', $params);
     }
 }
-?>
