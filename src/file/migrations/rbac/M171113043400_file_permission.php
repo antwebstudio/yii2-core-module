@@ -7,9 +7,9 @@ use ant\rbac\Migration;
 use ant\rbac\Role;
 use ant\rbac\rules\IsOwnModelRule;
 use ant\file\models\File;
-use frontend\modules\file\controllers\FolderController;
-use frontend\modules\file\controllers\FileController;
-use frontend\modules\file\controllers\FileStorageItemController;
+use ant\file\controllers\FolderController;
+use ant\file\controllers\FileController;
+use ant\file\controllers\FileStorageItemController;
 
 class M171113043400_file_permission extends Migration
 {
