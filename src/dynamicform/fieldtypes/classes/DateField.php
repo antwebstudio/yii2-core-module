@@ -71,6 +71,6 @@ class DateField extends FieldTypes
     public static function render($params = [])
     {
 		// Use renderAjax will cause the container cannot work properly with bootstrap collapse
-        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/date-field', $params);
+        return Yii::$app->view->renderAjax('@ant/dynamicform/fieldtypes/views/date-field', $params);
     }
 }
