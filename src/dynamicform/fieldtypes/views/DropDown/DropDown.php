@@ -26,7 +26,7 @@ use ant\helpers\ScriptHelper;
 			'key' => $key,
 			'fieldNamePrefix' => $fieldNamePrefix,
 		]) ?>
-	<?php endforeach; ?>
+	<?php endforeach ?>
 	</div>
 
 
@@ -39,9 +39,9 @@ use ant\helpers\ScriptHelper;
 
 <?php \ant\widgets\JsBlock::begin() ?>
 <script>
-(function(){
-	var dropDownSetting = $('#<?=$widgetId . $key;?>dynamicfield-dropdown-setting');
-	var newDropDownItemBtn = dropDownSetting.find('#<?=$widgetId . $key?>new-dynamicfield-dropdown-setting-item-button');
+(function() {
+	var dropDownSetting = $('#<?=$widgetId . $key ?>dynamicfield-dropdown-setting');
+	var newDropDownItemBtn = dropDownSetting.find('#<?= $widgetId . $key ?>new-dynamicfield-dropdown-setting-item-button');
 	var container = dropDownSetting.find('#<?=$widgetId . $key?>dynamicfield-dropdown-setting-items');
 
 	newDropDownItemBtn.on('click', function(event){
@@ -65,7 +65,7 @@ use ant\helpers\ScriptHelper;
 		container.append($(item).hide().fadeIn(300));
 	});
 
-	<?php if(empty($model->items)): ?>newDropDownItemBtn.trigger('click');<?php endif; ?>
-}());
+	<?php if(empty($model->items)): ?>newDropDownItemBtn.trigger('click');<?php endif ?>
+})();
 </script>
 <?php \ant\widgets\JsBlock::end() ?>
