@@ -44,6 +44,10 @@ class Receiver extends \ant\sandbox\components\BaseReceiver {
 		return $this->ResponseURL;
 	}
 	
+	public function getBackendUrl() {
+		return $this->BackendURL;
+	}
+	
 	public function getRedirectUrl() {
 		return $this->ResponseURL;
 	}

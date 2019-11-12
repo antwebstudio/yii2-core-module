@@ -31,12 +31,26 @@ class DefaultController extends Controller
 		]);
 		$sandbox->process(\Yii::$app->request);
 		
+		$model = $sandbox->receiver;
+		
+		if (\Yii::$app->request->post('submit')) {
+			// Pay button is clicked
+			$job = new \ant\sandbox\gateway\ipay88\BackendJob([
+				'url' => $model->backendUrl, 
+				'params' => Yii::$app->request->post(),
+			]);
+			Yii::$app->queue->push($job);
+			//Yii::$app->queue->push($job);
+			
+			//$job->execute(null);
+		}
+		
 		if ($sandbox->receiver->isCustomResponse) {
 			return $sandbox->receiver->response();
 		} else {
 			return $this->render('index', [
 				'sandbox' => $sandbox,
-				'model' => $sandbox->receiver,
+				'model' => $model,
 				'isValid' => $sandbox->receiver->validate(),
 			]);
 		}
