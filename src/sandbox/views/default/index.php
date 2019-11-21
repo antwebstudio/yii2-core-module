@@ -1,5 +1,5 @@
 <?php
-$autoSubmit = true;
+$autoSubmit = \Yii::$app->sandbox->autoRedirect;
 ?>
 
 <?php if (\Yii::$app->request->post('submit')): ?>
@@ -18,7 +18,7 @@ $autoSubmit = true;
 		</pre>
 	</form>
 	<?php if ($autoSubmit): ?>
-		<script>document.forms[0].submit();</script>
+		<script>document.forms[0].submit(); document.forms[0].submit();</script>
 	<?php endif ?>
 <?php else: ?>
 
