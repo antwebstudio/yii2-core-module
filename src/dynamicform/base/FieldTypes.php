@@ -7,9 +7,10 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\base\Model;
 
-class FieldTypes extends Model
+abstract class FieldTypes extends Model
 {
 	public static $name = 'name';
+	protected static $view;
 	
 	public $field;
 
@@ -58,4 +59,15 @@ class FieldTypes extends Model
 
         return $dropDownList;
 	}
+
+	public static function render($params = [])
+    {
+		// Use renderAjax will cause the container cannot work properly with bootstrap collapse (is it?)
+		// But use render will cause the "New Item" for DropDownList is not working
+		if (Yii::$app->request->isAjax) {
+			return Yii::$app->view->renderAjax(static::$view, $params);
+		} else {
+			return Yii::$app->view->render(static::$view, $params);
+		}
+    }
 }

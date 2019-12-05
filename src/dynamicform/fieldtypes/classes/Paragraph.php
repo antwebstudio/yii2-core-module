@@ -11,6 +11,7 @@ class Paragraph extends FieldTypes
 
 	public $fieldName = 'value_text';
     public static $name = 'Paragraph';
+	protected static $view = '@ant/dynamicform/fieldtypes/views/Paragraph/Paragraph';
 
     public function rules()
     {
@@ -46,9 +47,4 @@ class Paragraph extends FieldTypes
 		
 		return \yii\helpers\Html::activeTextarea($model, $attribute, $options);
 	}
-
-    public static function render($params = [])
-    {
-        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/Paragraph/Paragraph', $params);
-    }
 }

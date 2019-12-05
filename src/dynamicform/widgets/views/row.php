@@ -38,7 +38,7 @@ use ant\dynamicform\base\FieldTypes;
 
         <div id="<?= $widgetId . $key ?>dynamic-field-setting-container" class="col-lg-7">
             <?php if ($model->class): ?>
-				<?php $className = $model->class; ?>
+				<?php $className = $model->class ?>
 				<?= $className::render([
 					'form' => $form,
 					'widgetId' => $widgetId,

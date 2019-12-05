@@ -8,6 +8,7 @@ class DateField extends FieldTypes
 {
 	//public static $idCount = 1;
     public static $name = "Date Field";
+	protected static $view = '@ant/dynamicform/fieldtypes/views/date-field';
 
 	public $fieldName = 'value_string';
     //public $items = [];
@@ -67,10 +68,4 @@ class DateField extends FieldTypes
 		]);
 		//return \yii\helpers\Html::activeDropDownList($model, $attribute, $items, $options);
 	}
-
-    public static function render($params = [])
-    {
-		// Use renderAjax will cause the container cannot work properly with bootstrap collapse
-        return Yii::$app->view->renderAjax('@ant/dynamicform/fieldtypes/views/date-field', $params);
-    }
 }

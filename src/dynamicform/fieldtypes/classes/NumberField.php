@@ -7,6 +7,7 @@ use ant\dynamicform\base\FieldTypes;
 class NumberField extends FieldTypes
 {
     public static $name = "Number Field";
+	protected static $view = '@ant/dynamicform/fieldtypes/views/NumberField/NumberField';
 	
 	public $fieldName = 'value_number';
     public $min, $max;
@@ -54,9 +55,4 @@ class NumberField extends FieldTypes
 		
 		return \yii\helpers\Html::activeTextInput($model, $attribute, $options);
 	}
-
-    public static function render($params = [])
-    {
-        return Yii::$app->view->render('@ant/dynamicform/fieldtypes/views/NumberField/NumberField', $params);
-    }
 }
