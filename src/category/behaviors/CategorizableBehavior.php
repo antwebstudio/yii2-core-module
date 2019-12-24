@@ -23,30 +23,90 @@ class CategorizableBehavior extends Behavior
   
   protected static $linkerRelations = [];
   
+  public function __call($name, $params) {
+    $attribute = preg_replace('/^get(.*)/isU', '', $name);
+	  if ($this->isCategoryTypeAttribute($attribute)) {
+			return $this->getCategoriesRelation($attribute);
+	  }
+	  return parent::__call($name, $params);
+  }
+  
+  public function hasMethod($name) {
+    $attribute = preg_replace('/^get(.*)/isU', '', $name);
+    return $this->isCategoryTypeAttribute($attribute) || parent::hasMethod($name);
+  }
+  
+	public function canGetProperty($name, $checkVars = true) {
+		if ($this->isCategoryTypeAttribute($name)) {
+			return true;
+		}
+		return parent::canGetProperty($name, $checkVars);
+	}
+
+	public function __get($name) {
+		if ($this->isCategoryTypeAttribute($name)) {
+			return $this->getCategoriesRelation($name);
+		}
+		return parent::__get($name);
+	}
+  
+  protected function isCategoryTypeAttribute($attribute) {
+		if (is_array($this->type)) {
+			return in_array($attribute, $this->type);
+		} else if (isset($this->attribute) && $attribute == $this->attribute) {
+			return true;
+		} else if ($attribute == $this->type) {
+			return true;
+		}
+		return false;
+  }
+  
   public function attach($owner) {
-		$name = $this->attribute;
+	    if (is_array($this->type) && isset($this->attribute)) {
+			throw new \Exception('Configuration of CategorizableBehavior is invalid. Please don\'t set attribute when type property is an array. ');
+		}
+		if (is_array($this->type)) {
+			foreach ($this->type as $name) {
+				$type = $name;
+				
+				$relations[$name.'_ids'] = [$name, 'updater' => [
+					'viaTableAttributesValue' => [
+						'model_class_id' => \ant\models\ModelClass::getClassId((get_class($owner))),
+						'category_type_id' => CategoryType::getIdFor($type),
+					],
+					
+					'viaTableCondition' => [
+						'category_type_id' => CategoryType::getIdFor($type),
+					],
+				]];
+			}
+		} else {
+			$name = $this->attribute;
+			$type = $this->type;
+			
+			$relations[$name.'_ids'] = [$name, 'updater' => [
+				'viaTableAttributesValue' => [
+					'model_class_id' => \ant\models\ModelClass::getClassId((get_class($owner))),
+					'category_type_id' => CategoryType::getIdFor($type),
+				],
+				
+				'viaTableCondition' => [
+					'category_type_id' => CategoryType::getIdFor($type),
+				],
+			]];
+		}
 		
 		$owner->attachBehaviors([
 			[
 				'class' => \voskobovich\linker\LinkerBehavior::className(),
-				'relations' => [
-					$name.'_ids' => [$name, 'updater' => [
-						'viaTableAttributesValue' => [
-							'model_class_id' => \ant\models\ModelClass::getClassId((get_class($owner))),
-							'category_type_id' => $this->getTypeId(),
-						],
-						
-						'viaTableCondition' => [
-							'category_type_id' => $this->getTypeId(),
-						],
-					]],
-				],
+				'relations' => $relations,
 			]
 		]);
 		return parent::attach($owner);
   }
 
   public function getTypeId() {
+	  if (YII_DEBUG) throw new \Exception('DEPRECATED');
 	  return CategoryType::getIdFor($this->type);
   }
   
