@@ -1,5 +1,5 @@
 <?php 
-use yii\bootstrap\Nav;
+use ant\widgets\Nav;
 ?>
 <?= Nav::widget([
     'options' => [

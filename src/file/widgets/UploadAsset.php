@@ -12,7 +12,7 @@ class UploadAsset extends AssetBundle
 
     public $depends = [
         'yii\web\JqueryAsset',
-        'yii\bootstrap\BootstrapAsset',
+        //'yii\bootstrap\BootstrapAsset',
         'trntv\filekit\widget\BlueimpFileuploadAsset'
     ];
 

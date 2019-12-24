@@ -32,6 +32,10 @@ class Upload extends \trntv\filekit\widget\Upload {
 			}
             $this->clientOptions['fields'] = $this->fields;
         }
+		
+		$this->clientOptions['removeIcon'] = 'fas fa-times-circle';
+		$this->clientOptions['plusIcon'] = 'fas fa-plus-circle';
+		$this->clientOptions['downIcon'] = 'fas fa-arrow-circle-down';
         return parent::init();
     }
     

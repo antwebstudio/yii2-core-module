@@ -8,10 +8,10 @@ use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
 use trntv\filekit\actions\DeleteAction;
 use trntv\filekit\actions\UploadAction;
-use common\modules\category\models\Category;
-use common\modules\category\models\CategoryType;
-use common\modules\category\models\CategoryAttachment;
-use common\modules\category\models\CategorySearch;
+use ant\category\models\Category;
+use ant\category\models\CategoryType;
+use ant\category\models\CategoryAttachment;
+use ant\category\models\CategorySearch;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -70,9 +70,9 @@ class DefaultController extends Controller
      * Lists all Category models.
      * @return mixed
      */
-    public function actionIndex($type = null)
+    public function actionIndex($type = 'default')
     {
-        $searchModel = new CategorySearch([ 'type_id' => CategoryType::getIdFor($type) ]);
+        $searchModel = new CategorySearch(['type' => CategoryType::getIdFor($type)]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->pagination = false;
 
@@ -101,7 +101,7 @@ class DefaultController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($type = null) // Should be null, or else the showTypeField will have invalid data
+    public function actionCreate($type = 'default') // Should be null, or else the showTypeField will have invalid data
     {
 		$root = Category::ensureRoot($type);
 		

@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
-use trntv\filekit\widget\Upload;
+use ant\file\widgets\Upload;
 use common\modules\category\models\Category;
 /* @var $this yii\web\View */
 /* @var $model common\modules\article\models\ArticleCategory */
@@ -44,7 +44,7 @@ use common\modules\category\models\Category;
     <?php endif ?>
 
     <?php if ($model->isFieldShow('body')): ?>
-        <?= $form->field($model, 'body')->widget(\yii\imperavi\Widget::className(), [
+        <?= $form->field($model, 'body')->widget(\ant\widgets\TinyMce::className(), [
         ]) ?>
     <?php endif ?>
 

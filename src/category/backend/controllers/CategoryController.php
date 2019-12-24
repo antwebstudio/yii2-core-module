@@ -4,7 +4,7 @@ namespace ant\category\backend\controllers;
 
 use Yii;
 use SteelyWing\Chinese\Chinese;
-use common\modules\category\models\Category;
+use ant\category\models\Category;
 use yii\db\Expression;
 /*
 use yii\web\Controller;

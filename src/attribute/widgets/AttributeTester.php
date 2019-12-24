@@ -5,7 +5,7 @@ use Yii;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\bootstrap\Modal;
+use ant\widgets\Modal;
 use ant\attribute\exceptions\ParseException;
 
 class AttributeTester extends \yii\base\Widget {

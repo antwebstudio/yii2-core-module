@@ -31,8 +31,8 @@
                     })
                 }
                 $input.wrapAll($('<li class="upload-kit-input"></div>'))
-                    .after($('<span class="glyphicon glyphicon-plus-sign add"></span>'))
-                    .after($('<span class="glyphicon glyphicon-circle-arrow-down drag"></span>'))
+                    .after($('<span class="glyphicon glyphicon-plus-sign ' + options.plusIcon + ' add"></span>'))
+                    .after($('<span class="glyphicon glyphicon-circle-arrow-down ' + options.downIcon + 'drag"></span>'))
                     .after($('<span/>', {"data-toggle":"popover", "class":"glyphicon glyphicon-exclamation-sign error-popover"}))
                     .after(
                     '<div class="progress">'+
@@ -211,7 +211,7 @@
 						buttons.append(button);
 					}
 				} else {
-						buttons.append($('<span/>', {"class": "glyphicon glyphicon-remove-circle remove", "data-url": file.delete_url}));
+						buttons.append($('<span/>', {"class": "glyphicon glyphicon-remove-circle " + options.removeIcon + " remove", "data-url": file.delete_url}));
 				}
                 
                 item.append(buttons);

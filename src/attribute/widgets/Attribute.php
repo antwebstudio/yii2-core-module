@@ -5,11 +5,9 @@ use Yii;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\bootstrap\Modal;
 use yii\widgets\ActiveForm;
-
 use unclead\multipleinput\MultipleInput;
-
+use ant\widgets\Modal;
 use ant\attribute\models\Attribute as AttributeModel;
 
 class Attribute extends InputWidget

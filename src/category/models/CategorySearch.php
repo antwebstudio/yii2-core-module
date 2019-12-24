@@ -13,6 +13,7 @@ use ant\category\models\Category;
 class CategorySearch extends Category
 {
 	public $parent;
+	public $type;
 	
     /**
      * @inheritdoc
@@ -22,7 +23,7 @@ class CategorySearch extends Category
         return [
             [['attachments', 'attachments2', 'thumbnail', 'banner', 'parent'], 'safe'],
             [['id', 'parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['slug', 'title', 'body', 'subtitle', 'type_id'], 'safe'],
+            [['slug', 'title', 'body', 'subtitle', 'type'], 'safe'],
         ];
     }
 
@@ -66,10 +67,10 @@ class CategorySearch extends Category
             $query->childrenOf($this->parent_id, 1);
 		}
 		
-		if (is_null($this->type_id)) {
+		if (is_null($this->type)) {
 			$query->andWhere(['type_id' => null]);
 		} else {
-			$query->typeOf($this->type_id);
+			$query->typeOf($this->type);
 		}
 		if (isset($this->parent)) {
 			$query->childrenOf($this->parent, 1);

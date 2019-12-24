@@ -6,4 +6,3 @@ return [
     'isCoreModule' => false,
 	'depends' => ['file'], // Payment module should not depends on any other module
 ];
-?>

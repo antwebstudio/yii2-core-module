@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use ant\rbac\Permission;
+
 $controllerClassName = $this->context->className();
 
 /* @var $this yii\web\View */
@@ -9,11 +11,10 @@ $controllerClassName = $this->context->className();
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = (isset($type) ? ucfirst($type.' ') : '') . 'Categories';
+$this->params['title'] = $this->title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-category-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 	<?php if ($showTypeField): ?>
@@ -38,10 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'status',
             // 'created_at',
 			[
-				'class' => 'common\widgets\NestedSortableColumn',
+				'class' => 'ant\widgets\NestedSortableColumn',
 				'attribute' => 'title',
 				'structureId' => 1,
-				'moveElementUrl' => ['/category/category/move-tree-node'],
+				'moveElementUrl' => ['/category/backend/category/move-tree-node'],
 			],
             [
                 'label' => 'Updated At',
@@ -53,11 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'thumbnail_base_url:url',
             // 'thumbnail_path',
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => 'ant\grid\ActionColumn',
                 'visibleButtons' => [
+                    'view' => function($model) {
+                        return false;
+                    },
                     'delete' => function($model, $key) {
                         $controllerClassName = \ant\category\backend\controllers\DefaultController::className();
-                        return Yii::$app->user->can(common\rbac\Permission::of('delete', $controllerClassName)->name);  
+                        return Permission::can('delete', $controllerClassName);
                     },
                 ],
             ],
