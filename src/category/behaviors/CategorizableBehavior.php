@@ -165,7 +165,7 @@ class CategorizableBehavior extends Behavior
       }
   }
 
-  public function getCategory($categoryId)
+  /*public function getCategory($categoryId)
   {
 	  if (YII_DEBUG) throw new \Exception('DEPRECATED');
     $query=$this->owner->hasMany(Category::className(), ['id' => 'category_id'])
@@ -180,7 +180,7 @@ class CategorizableBehavior extends Behavior
       $query->onCondition(['type' => $this->categoryType]);
     }
     return $query;
-  }
+  }*/
 
   public function haveCategory($id)
   {

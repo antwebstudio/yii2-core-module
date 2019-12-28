@@ -20,9 +20,9 @@ class ElfinderController extends Controller
                     'roots' => [
                         [
 							'driver' => 'Flysystem', 
-							'path' => 'images',
-							'URL' => Yii::getAlias('@storageUrl/elfinder/images'), 
-							'filesystem' => new Filesystem(new Local(Yii::getAlias('@storage/elfinder'))),
+							'path' => '',
+							'URL' => Yii::getAlias('@storageUrl/finder'), 
+							'filesystem' => new Filesystem(new Local(Yii::getAlias('@storage/web/finder'))),
 							'cache' => 'session', // 'session', 'memory' or false
 						],
                     ],

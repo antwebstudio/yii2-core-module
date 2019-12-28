@@ -50,6 +50,14 @@ class FileAttachment extends \yii\db\ActiveRecord
 		return $model;
 	}
 	
+	public static function getFirstUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path') {
+		if (isset($attachmentArray[$baseUrlAttribute])) {
+			return self::getUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path');
+		} else if (isset($attachmentArray[0][$baseUrlAttribute])) {
+			return self::getUrl($attachmentArray[0], $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path');
+		}
+	}
+	
 	public static function getUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path') {
 		$baseUrl = $useOwnBaseUrl ? $attachmentArray['base_url'] : Yii::$app->fileStorage->baseUrl;
 		return isset($attachmentArray) ? $baseUrl.'/'.$attachmentArray['path'] : null;

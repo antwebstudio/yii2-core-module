@@ -197,7 +197,7 @@ class Category extends ActiveRecord
     }
 	
 	public function getRoute() {
-		return ['/category/category', 'slug' => $this->slug, 'id' => $this->id];
+		return ['/category/category/view', 'slug' => $this->slug, 'id' => $this->id];
 	}
 	
 	public function getUrl() {

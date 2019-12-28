@@ -7,10 +7,10 @@ use yii\web\HttpException;
 
 use yii\data\ActiveDataProvider;
 
-use common\rbac\ModelAccessControl;
-use common\modules\category\models\Category;
-use common\modules\category\models\CategoryType;
-use common\modules\category\models\CategorySearch;
+use ant\rbac\ModelAccessControl;
+use ant\category\models\Category;
+use ant\category\models\CategoryType;
+use ant\category\models\CategorySearch;
 
 class CategoryController extends Controller
 {
@@ -40,6 +40,11 @@ class CategoryController extends Controller
 
     public function actionView($id = null)
     {
+		$model = Category::findOne($id);
+		
+        return $this->render($this->action->id, [
+			'model' => $model,
+        ]);
         
     }
 }

@@ -1,7 +1,7 @@
 {
     "name": "antweb/yii2-core-module",
     "description": "Yii2 Module",
-    "type": "library",
+    "type": "ant-module",
     "authors": [
         {
             "name": "Hui Yang",
@@ -12,6 +12,10 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.0",
+        "yii2-starter-kit/yii2-file-kit": "*",
+        "inspirenmy/php-math-parser": "*",
+        "creocoder/yii2-nested-sets": "^0.9.0",
+        "yiisoft/yii2-bootstrap": "~2.0.0",
 		"antweb/yii2-core" : "*"
 	},
     "require-dev": {
