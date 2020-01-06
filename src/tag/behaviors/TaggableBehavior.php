@@ -11,13 +11,47 @@ class TaggableBehavior extends \dosamigos\taggable\Taggable {
 	public $modelClassIdAttribute = 'model_class_id';
 	public $asArray = true;
 	
-	public function __get($name)
-    {
-		if (isset($this->tagValues)) {
+	public function attach($owner) {
+		if (!isset($this->modelClassId)) $this->modelClassId = \ant\models\ModelClass::getClassId($owner);
+		parent::attach($owner);
+	}
+	
+	public function __call($name, $params) {
+		$attribute = preg_replace('/^get(.*)/isU', '', $name);
+		if ($this->isTagAttribute($attribute)) {
+			return $this->getTagsRelation(\ant\models\ModelClass::getClassId(get_class($this)));
+		}
+		return parent::__call($name, $params);
+	}
+
+	public function __get($name) {
+		if ($this->isTagAttribute($name)) {
+			return $this->getTagsRelation($name);
+		} else if (isset($this->tagValues)) {
 			return $this->tagValues;
 		}
         return $this->getTagNames();
-    }
+	}
+  
+	public function canGetProperty($name, $checkVars = true) {
+		if ($this->isTagAttribute($name)) {
+			return true;
+		}
+		return parent::canGetProperty($name, $checkVars);
+	}
+  
+	public function hasMethod($name) {
+		$attribute = preg_replace('/^get(.*)/isU', '', $name);
+		return $this->isTagAttribute($attribute) || parent::hasMethod($name);
+	}
+  
+	protected function isTagAttribute($attribute) {
+		if (isset($this->relation) && $attribute == $this->relation) {
+		
+			return true;
+		}
+		return false;
+	}
 	
 	private function getTagNames()
     {
@@ -69,7 +103,9 @@ class TaggableBehavior extends \dosamigos\taggable\Taggable {
             if ($tag->save()) {
                 $updatedTags[] = $tag;
                 $rows[] = [$this->owner->getPrimaryKey(), $tag->getPrimaryKey(), $this->modelClassId];
-            }
+            } else {
+				throw new \Exception('Cannot save tag. '.print_r($tag->errors, 1));
+			}
         }
         if (!empty($rows)) {
             $this->owner->getDb()

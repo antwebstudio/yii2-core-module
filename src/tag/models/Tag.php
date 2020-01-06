@@ -2,6 +2,7 @@
 namespace ant\tag\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%tag}}".
@@ -35,6 +36,10 @@ class Tag extends \yii\db\ActiveRecord
             [['model_class_id'], 'exist', 'skipOnError' => true, 'targetClass' => \ant\models\ModelClass::className(), 'targetAttribute' => 'id'],
         ];
     }
+	
+	public function getUrl() {
+		return Url::to(['/tag/tag/view', 'id' => $this->id, 'tag' => $this->name]);
+	}
 
     /**
      * @inheritdoc

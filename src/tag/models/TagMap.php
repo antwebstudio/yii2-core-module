@@ -20,7 +20,7 @@ class TagMap extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tag_map';
+        return '{{%tag_map}}';
     }
 
     /**
