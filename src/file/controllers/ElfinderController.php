@@ -2,12 +2,12 @@
 
 namespace ant\file\controllers;
 
-use alexantr\elfinder\ConnectorAction;
 use Yii;
 use yii\web\Controller;
 use elFinderVolumeFlysystem as Flysystem;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use ant\file\actions\ElFinderConnectorAction;
 
 class ElfinderController extends Controller
 {
@@ -15,7 +15,9 @@ class ElfinderController extends Controller
     {
         return [
             'connector' => [
-                'class' => ConnectorAction::className(),
+                'class' => ElFinderConnectorAction::className(),
+				'modelId' => Yii::$app->request->get('model_id'),
+				'modelClassId' => Yii::$app->request->get('model_class_id'),
                 'options' => [
                     'roots' => [
                         [
@@ -38,7 +40,11 @@ class ElfinderController extends Controller
             ],*/
             'tinymce' => [
                 'class' => \ant\file\adapters\actions\TinyMce5::className(),
-                'connectorRoute' => 'connector',
+                'connectorRoute' => [
+					'connector', 
+					'model_class_id' => Yii::$app->request->get('model_class_id'),
+					'model_id' => Yii::$app->request->get('model_id')
+				],
             ],
         ];
     }

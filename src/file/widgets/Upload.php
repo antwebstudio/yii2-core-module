@@ -61,7 +61,11 @@ class Upload extends \trntv\filekit\widget\Upload {
      */
     public function registerClientScript()
     {
-        UploadAsset::register($this->getView());
+		if (isset(Yii::$app->params['bsVersion']) && Yii::$app->params['bsVersion'] >= 4) {
+			UploadBootstrap4Asset::register($this->getView());
+		} else {
+			UploadAsset::register($this->getView());
+		}
         $options = Json::encode($this->clientOptions);
         if ($this->sortable) {
             JuiAsset::register($this->getView());

@@ -4,6 +4,7 @@ namespace ant\file\models;
 
 use Yii;
 use yii\imagine\Image;
+use ant\models\ModelClass;
 
 /**
  * This is the model class for table "s_file_attachment".
@@ -93,7 +94,7 @@ class FileAttachment extends \yii\db\ActiveRecord
             [['path'], 'required'],
             [['order', 'size', 'created_at'], 'integer'],
             [['path', 'base_url', 'type', 'name'], 'string', 'max' => 255],
-			[['model', 'model_id', 'caption', 'description', 'data'], 'safe'],
+			[['model', 'model_class_id', 'model_id', 'caption', 'description', 'data'], 'safe'],
         ];
     }
 
@@ -116,6 +117,13 @@ class FileAttachment extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+	
+	public function getModel() {
+		if (isset($this->model_class_id)) {
+			$class = ModelClass::getClassName($this->model_class_id);
+			return $this->hasOne($class, ['id' => 'model_id']);
+		}
+	}
 	
 	public function getFullPath() {
 		return Yii::$app->fileStorage->filesystem->getAdapter()->applyPathPrefix($this->path);

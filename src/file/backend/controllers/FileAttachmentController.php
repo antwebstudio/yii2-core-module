@@ -3,47 +3,24 @@
 namespace ant\file\backend\controllers;
 
 use Yii;
-use ant\file\models\FileStorageItem;
-use ant\file\models\FileStorageItemSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use ant\file\models\FileAttachment;
+use ant\file\models\FileAttachmentSearch;
 
 /**
  * FileStorageController implements the CRUD actions for FileStorageItem model.
  */
-class FileStorageItemController extends Controller
+class FileAttachmentController extends \yii\web\Controller
 {
     public function behaviors()
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                     'upload-delete' => ['delete']
                 ]
-            ]
-        ];
-    }
-
-
-    public function actions()
-    {
-        return [
-            'upload' => [
-                'class' => 'trntv\filekit\actions\UploadAction',
-                'deleteRoute' => 'upload-delete'
-            ],
-            'upload-delete' => [
-                'class' => 'trntv\filekit\actions\DeleteAction'
-            ],
-            'upload-imperavi' => [
-                'class' => 'trntv\filekit\actions\UploadAction',
-                'fileparam' => 'file',
-                'responseUrlParam'=> 'filelink',
-                'multiple' => false,
-                'disableCsrf' => true
             ]
         ];
     }
@@ -54,23 +31,24 @@ class FileStorageItemController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new FileStorageItemSearch();
+        $searchModel = new FileAttachmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->sort = [
             'defaultOrder' => ['created_at' => SORT_DESC]
         ];
-        $components = \yii\helpers\ArrayHelper::map(
-            FileStorageItem::find()->select('component')->distinct()->all(),
+        /*$components = \yii\helpers\ArrayHelper::map(
+            FileAttachment::find()->select('component')->distinct()->all(),
             'component',
             'component'
         );
         $totalSize = FileStorageItem::find()->sum('size') ?: 0;
+		*/
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'components' => $components,
-            'totalSize' => $totalSize
+            //'components' => $components,
+            //'totalSize' => $totalSize
         ]);
     }
 
@@ -94,7 +72,9 @@ class FileStorageItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+		Yii::$app->elfinderStorage->delete($model->path);
+		$model->delete();
 
         return $this->redirect(['index']);
     }
@@ -108,7 +88,7 @@ class FileStorageItemController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = FileStorageItem::findOne($id)) !== null) {
+        if (($model = FileAttachment::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
