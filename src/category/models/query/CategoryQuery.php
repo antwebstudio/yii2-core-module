@@ -51,6 +51,14 @@ class CategoryQuery extends ActiveQuery
 		return $this->andWhere([$depthAttribute => $depth]);
 	}
 	
+	public function except($ids) {
+		return $this->alias('category')->andWhere(['NOT IN', 'category.id', (array) $ids]);
+	}
+	
+	public function type($type) {
+		return $this->typeOf($type);
+	}
+	
 	public function typeOf($type) {
 		if (is_int($type)) {
 			return $this->joinWith('type type')->andWhere(['type.id' => $type]);

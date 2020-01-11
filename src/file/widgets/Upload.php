@@ -1,6 +1,7 @@
 <?php
 namespace ant\file\widgets;
 
+use Yii;
 use yii\helpers\Json;
 use yii\helpers\Html;
 use yii\jui\JuiAsset;
@@ -8,6 +9,7 @@ use yii\jui\JuiAsset;
 class Upload extends \trntv\filekit\widget\Upload {
     public $fields = [];
     public $form;
+	public $url = ['/file/file-storage-item/upload'];
     public $customFieldDivCss = 'upload-custom-field-group';
 
     protected $_fieldObjects = [];

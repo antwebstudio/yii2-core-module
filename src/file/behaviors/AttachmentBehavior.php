@@ -31,6 +31,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     public $isRequired = false;
 
     protected $_validators;
+	protected $_value;
 
     public function init() {
         parent::init();
@@ -39,6 +40,62 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
             throw new \Exception('Currently not support single attachment. When single attachment, the file attachment will no be saved.');
         }*/
     }
+	
+	/*protected function getDynamicAttributeValue($name) {
+		return $this->_value[$name];
+	}
+	
+	protected function setDynamicAttributeValue($name, $value) {
+		return $this->_value[$name];
+	}
+	
+	public function __call($name, $params) {
+		$attribute = preg_replace('/^get(.*)/isU', '', $name);
+		if ($this->isDynamicAttribute($attribute)) {
+			return $this->getDynamicAttributeValue($attribute);
+		}
+		return parent::__call($name, $params);
+	}
+
+	public function hasMethod($name) {
+		$attribute = preg_replace('/^get(.*)/isU', '', $name);
+		return $this->isDynamicAttribute($attribute) || parent::hasMethod($name);
+	}
+  
+	public function canGetProperty($name, $checkVars = true) {
+		if ($this->isDynamicAttribute($name)) {
+			return true;
+		}
+		return parent::canGetProperty($name, $checkVars);
+	}
+  
+	public function canSetProperty($name, $checkVars = true) {
+		if ($this->isDynamicAttribute($name)) {
+			return true;
+		}
+		return parent::canSetProperty($name, $checkVars);
+	}
+
+	public function __set($name, $value) {
+		if ($this->isDynamicAttribute($name)) {
+			return $this->setDynamicAttributeValue($name, $value);
+		}
+		return parent::__set($name);
+	}
+
+	public function __get($name) {
+		if ($this->isDynamicAttribute($name)) {
+			return $this->getDynamicAttributeValue($name);
+		}
+		return parent::__get($name);
+	}
+  
+	protected function isDynamicAttribute($attribute) {
+		if (isset($this->attribute) && $attribute == $this->attribute) {
+			return true;
+		}
+		return false;
+	}*/
 
     public function events()
     {
@@ -157,10 +214,11 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     
     public function getFileAttachmentGroup() {
         return $this->owner->hasOne(FileAttachmentGroup::className(), ['model_id' => 'id'])
-            ->onCondition(['model' => $this->modelType, 'type' => $this->type]);
+            ->onCondition(['model' => $this->getModelType(), 'type' => $this->type]);
     }
 	
 	protected function getModelType() {
+		return \ant\models\ModelClass::getClassId($this->owner);
 		return $this->modelType;
     }
     protected function ensureAttachmentGroup() {
