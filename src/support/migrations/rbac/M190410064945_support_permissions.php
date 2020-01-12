@@ -13,6 +13,7 @@ class M190410064945_support_permissions extends Migration
 	public function init() {
 		$this->permissions = [
 			\ant\support\controllers\ContactFormController::className() => [
+				'index' => ['Send a enquiry to admin', [Role::ROLE_GUEST]],
 				'create' => ['Send a enquiry to admin', [Role::ROLE_GUEST]],
 			],
 		];

@@ -2,8 +2,13 @@
 namespace ant\support\controllers;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 class ContactFormController extends \yii\web\Controller {
+	public function actionIndex() {
+		return $this->redirect(['create']);
+	}
+	
 	public function actionCreate() {
 		$model = $this->module->getFormModel('contact');
 		
@@ -12,6 +17,8 @@ class ContactFormController extends \yii\web\Controller {
 				Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 				return ['success' => true];
 			}
+			$model->trigger(ActiveRecord::EVENT_AFTER_INSERT);
+			return $this->refresh();
 		}
 		
 		if (Yii::$app->request->isAjax) {
