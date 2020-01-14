@@ -43,6 +43,10 @@ use common\modules\category\models\Category;
         ?>
     <?php endif ?>
 
+    <?php if ($model->isFieldShow('short_description')): ?>
+        <?= $form->field($model, 'short_description')->textArea() ?>
+    <?php endif ?>
+
     <?php if ($model->isFieldShow('body')): ?>
         <?= $form->field($model, 'body')->widget(\ant\widgets\TinyMce::className(), [
         ]) ?>

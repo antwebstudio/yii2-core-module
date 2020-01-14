@@ -72,12 +72,14 @@ class DefaultController extends Controller
      */
     public function actionIndex($type = 'default')
     {
+		$categoryType = CategoryType::findOne(['name' => $type]);
         $searchModel = new CategorySearch(['type' => CategoryType::getIdFor($type)]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->pagination = false;
 
         return $this->render('index', [
             'type' => $type,
+			'categoryType' => $categoryType,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'showTypeField' => Yii::$app->request->get('showType', !isset($type)),
@@ -105,12 +107,15 @@ class DefaultController extends Controller
     {
 		$root = Category::ensureRoot($type);
 		
+		$categoryType = CategoryType::findOne(['name' => $type]);
 		$categoryTypes = CategoryType::find()->all();
 		
         $model = new Category([ 'type_id' => CategoryType::getIdFor($type) ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->appendTo($root)) {
-			Yii::$app->session->setFlash('success', 'New category is added. ');
+			Yii::$app->session->setFlash('success', Yii::t('category', 'New {categoryType} is added. ', [
+				'categoryType' => lcfirst(isset($categoryType->title) ? $categoryType->title : 'category'),
+			]));
             return $this->redirect(['index', 'type' => $type]);
         } else {
             return $this->render('create', [
@@ -134,6 +139,9 @@ class DefaultController extends Controller
 		//$this->module->configureModel($model, $model->type);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->setFlash('success', Yii::t('category', '{categoryType} is updated. ', [
+				'categoryType' => ucfirst(isset($model->type->title) ? $model->type->title : 'category'),
+			]));
             return $this->redirect(['index', 'type' => $model->type->name]);
         } else {
             return $this->render('update', [

@@ -10,7 +10,9 @@ $controllerClassName = $this->context->className();
 /* @var $searchModel common\models\ArticleCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = (isset($type) ? ucfirst($type.' ') : '') . 'Categories';
+$typeName = isset($categoryType->title) ? $categoryType->title : 'Category';
+
+$this->title = 'Manage '.$categoryType->title;
 $this->params['title'] = $this->title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php endif ?>
 	
     <p>
-        <?= Html::a('Create Category', ['create', 'type' => $type, 'showType' => $showTypeField], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create '.$typeName, ['create', 'type' => $type, 'showType' => $showTypeField], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -40,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_at',
 			[
 				'class' => 'ant\widgets\NestedSortableColumn',
+				'sortable' => $categoryType->is_hierarchical,
 				'attribute' => 'title',
 				'structureId' => 1,
 				'moveElementUrl' => ['/category/backend/category/move-tree-node'],

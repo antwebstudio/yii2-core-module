@@ -96,6 +96,18 @@ class Category extends ActiveRecord
             ],
 			'configurable' => [
 				'class' => 'ant\behaviors\ConfigurableModelBehavior',
+				'visibility' => function($attribute) {
+					if (isset($this->type->visible_fields)) {
+						$fields = explode(',', $this->type->visible_fields);
+						foreach ($fields as $field) {
+							if (trim($field) == $attribute) {
+								return true;
+							}
+						}
+						return false;
+					}
+					return true;
+				}
 			],
             // [
             //     'class' => \trntv\filekit\behaviors\UploadBehavior::className(),
@@ -175,7 +187,7 @@ class Category extends ActiveRecord
             [['title', 'subtitle'], 'string', 'max' => 512],
             [['slug'], 'unique', 'targetAttribute' => ['slug', 'type_id']],
             [['slug'], 'string', 'max' => 1024],
-            [['body', 'attachments', 'attachments2', 'thumbnail', 'banner'], 'safe'],
+            [['short_description', 'body', 'attachments', 'attachments2', 'thumbnail', 'banner'], 'safe'],
             ['status', 'integer'],
 			['parent_id', 'default', 'value' => 0],
             ['parent_id', 'exist', 'when' => function($model) { return $model->parent_id != 0; }, 'targetClass' => Category::className(), 'targetAttribute' => 'id'],
@@ -197,7 +209,7 @@ class Category extends ActiveRecord
     }
 	
 	public function getRoute() {
-		return ['/category/category/view', 'slug' => $this->slug, 'id' => $this->id];
+		return ['/category/category/view', 'slug' => $this->slug, 'id' => $this->id, 'type' => $this->type->name];
 	}
 	
 	public function getUrl() {
