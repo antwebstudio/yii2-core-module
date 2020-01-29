@@ -11,6 +11,7 @@ class Upload extends \trntv\filekit\widget\Upload {
     public $form;
 	public $url = ['/file/file-storage-item/upload'];
     public $customFieldDivCss = 'upload-custom-field-group';
+	public $multiple = true;
 
     protected $_fieldObjects = [];
 	

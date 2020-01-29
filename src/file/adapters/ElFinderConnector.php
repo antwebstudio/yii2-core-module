@@ -1,6 +1,7 @@
 <?php
 namespace ant\file\adapters;
 
+use elFinder;
 /**
  * Default elFinder connector
  *

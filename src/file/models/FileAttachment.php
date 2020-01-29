@@ -4,6 +4,8 @@ namespace ant\file\models;
 
 use Yii;
 use yii\imagine\Image;
+use ant\helpers\Html;
+use ant\helpers\File;
 use ant\models\ModelClass;
 
 /**
@@ -51,17 +53,43 @@ class FileAttachment extends \yii\db\ActiveRecord
 		return $model;
 	}
 	
+	public static function toSliderFormat($attachmentArray, $width = '100%', $height = '420px') {
+		$return = [];
+		foreach ($attachmentArray as $attachment) {
+			$url = self::getUrl($attachment);
+			
+			if (self::isImage($attachment)) {
+				$return[] = Html::tag('div', Html::img($url, ['style' => 'width: '.$width.'; height: '.$height.'; object-fit: contain; ']), ['class' => 'background-filter', 	'style' => 'background-image: url(\''.$url.'\');']);
+			} else {
+				$return[] = Html::video($url, ['controls' => 'controls', 'width' => '100%']);
+			}
+		}
+		return $return;
+	}
+	
+	public static function isVideo($attachmentArray) {
+		return File::isVideoTypeMime($attachmentArray['type']);
+	}
+	
+	public static function isImage($attachmentArray) {
+		return File::isImageTypeMime($attachmentArray['type']);
+	}
+	
 	public static function getFirstUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path') {
 		if (isset($attachmentArray[$baseUrlAttribute])) {
-			return self::getUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path');
+			return self::getUrl($attachmentArray, $useOwnBaseUrl, $baseUrlAttribute, $pathAttribute);
 		} else if (isset($attachmentArray[0][$baseUrlAttribute])) {
-			return self::getUrl($attachmentArray[0], $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path');
+			return self::getUrl($attachmentArray[0], $useOwnBaseUrl, $baseUrlAttribute, $pathAttribute);
 		}
 	}
 	
 	public static function getUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path') {
 		$baseUrl = $useOwnBaseUrl ? $attachmentArray['base_url'] : Yii::$app->fileStorage->baseUrl;
-		return isset($attachmentArray) ? $baseUrl.'/'.$attachmentArray['path'] : null;
+		return isset($attachmentArray) ? self::normalizeUrl($baseUrl.'/'.$attachmentArray['path']) : null;
+	}
+	
+	protected static function normalizeUrl($url) {
+		return str_replace(['\\', '\/\/'], '\/', $url);
 	}
 	
 	public function behaviors() {
