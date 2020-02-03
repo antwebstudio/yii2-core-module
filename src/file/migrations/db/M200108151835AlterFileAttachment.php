@@ -17,7 +17,7 @@ class M200108151835AlterFileAttachment extends Migration
     {
         $this->addColumn($this->tableName, 'model_id', $this->morphId());
         $this->addColumn($this->tableName, 'model_class_id', $this->morphClass());
-        $this->dropColumn($this->tableName, 'model');
+        //$this->dropColumn($this->tableName, 'model');
 
     }
 
@@ -28,7 +28,7 @@ class M200108151835AlterFileAttachment extends Migration
     {
         $this->dropColumn($this->tableName, 'model_id');
         $this->dropColumn($this->tableName, 'model_class_id');
-        $this->addColumn($this->tableName, 'model', $this->string(255));
+        //$this->addColumn($this->tableName, 'model', $this->string(255));
     }
 
     /*

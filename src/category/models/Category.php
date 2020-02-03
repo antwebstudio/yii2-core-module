@@ -47,14 +47,17 @@ class Category extends ActiveRecord
         return new CategoryQuery(get_called_class());
     }
 	
-	public static function ensureByTitle($values, $categoryType) {
-		$categories = self::find()
+	protected static function _ensureByTitles($values, $categoryType, $categoriesAsArray = true) {
+		
+		$query = self::find()
 			->alias('category')
 			->typeOf($categoryType)
 			->indexBy('title')
-			->asArray()
-			->andWhere(['category.title' => $values])
-			->all();
+			->andWhere(['category.title' => $values]);
+		
+		if ($categoriesAsArray) $query->asArray();
+		
+		$categories = $query->all();
 		
 		$ids = [];
 		foreach ((array) $values as $value) {
@@ -64,12 +67,25 @@ class Category extends ActiveRecord
 				$category = new self;
 				$category->title = $value;
 				$category->type_id = CategoryType::getIdFor($categoryType);
-				if (!$category->appendTo($root)) throw new \Exception($count.':'.print_r(array_keys($categories),1).$categoryType.print_r($ids, 1).print_r($category->errors, 1).$value);
+				if (!$category->appendTo($root)) throw new \Exception(print_r(array_keys($categories),1).$categoryType.print_r($ids, 1).print_r($category->errors, 1).$value);
 				
 				$categories[$value] = $category;
 			}
 			$ids[$value] = $categories[$value]['id'];
 			//throw new \Exception('t'.$value.print_r($ids,1).$categoryType);
+		}
+		return $categories;
+	}
+	
+	public static function ensureByTitle($value, $categoryType) {
+		$categories = self::_ensureByTitles([$value], $categoryType, false);
+		return current($categories);
+	}
+	
+	public static function ensureByTitles($values, $categoryType) {
+		$categories = self::_ensureByTitles($values, $categoryType);
+		foreach ($categories as $value => $category) {
+			$ids[$value] = $category['id'];
 		}
 		return $ids;
 	}

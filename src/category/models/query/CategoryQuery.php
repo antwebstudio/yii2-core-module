@@ -15,7 +15,7 @@ class CategoryQuery extends ActiveQuery
 {
 	public function behaviors() {
         return [
-            \creocoder\nestedsets\NestedSetsQueryBehavior::className(),
+            \ant\behaviors\NestedSetsQueryBehavior::className(),
         ];
     }
 	
