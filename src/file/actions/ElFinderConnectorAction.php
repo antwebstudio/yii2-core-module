@@ -28,10 +28,12 @@ class ElFinderConnectorAction extends Action
     public function run()
     {
         Yii::$app->response->format = Response::FORMAT_RAW;
-        (new \ant\file\adapters\ElFinderConnector(new \elFinder($this->options)))->run([$this, 'callback']);
+        return (new \ant\file\adapters\ElFinderConnector(new \elFinder($this->options)))->run([$this, 'callback']);
     }
 	
 	public function callback($cmd, $args, $result, $elfinder) {
+		if (trim($cmd) == '') throw new \Exception('Invalid cmd. ');
+		
 		$callback = $cmd.'Callback';
 		if ($this->hasMethod($callback)) {
 			$this->{$callback}($args, $result, $elfinder);
@@ -146,7 +148,7 @@ class ElFinderConnectorAction extends Action
 	
 	protected function processRemoved($removed, $elfinder) {
 		foreach ($removed as $file) {
-			if ($file['mime'] != 'directory') {
+			if (!isset($file['mime']) || $file['mime'] != 'directory') {
 				$volume = $elfinder->getVolume($file);
 				
 				FileAttachment::deleteAll([

@@ -52,6 +52,7 @@
     "autoload": {
         "psr-4": {
 			"ant\\" : "src",
+			"elFinderVolume\\": "src/file/adapters",
 			"tests\\" : "tests"
 		}
     }

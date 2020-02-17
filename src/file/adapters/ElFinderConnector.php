@@ -110,7 +110,7 @@ class ElFinderConnector extends \elFinderConnector
 			if (isset($callback) && is_callable($callback)) {
 				call_user_func_array($callback, [$cmd, $args, $result, $this->elFinder]);
 			}
-            $this->output($result);
+            return $this->output($result);
         } catch (elFinderAbortException $e) {
             // connection aborted
             // unlock session data for multiple access
@@ -122,5 +122,148 @@ class ElFinderConnector extends \elFinderConnector
             }
             exit();
         }
+    }
+	
+	protected function output(array $data)
+    {
+        // unlock session data for multiple access
+        $this->elFinder->getSession()->close();
+        // client disconnect should abort
+        ignore_user_abort(false);
+
+        if ($this->header) {
+            self::sendHeader($this->header);
+        }
+
+        if (isset($data['pointer'])) {
+            // set time limit to 0
+            elFinder::extendTimeLimit(0);
+
+            // send optional header
+            if (!empty($data['header'])) {
+                self::sendHeader($data['header']);
+            }
+
+            // clear output buffer
+            while (ob_get_level() && ob_end_clean()) {
+            }
+
+            $toEnd = true;
+            $fp = $data['pointer'];
+            $sendData = !($this->reqMethod === 'HEAD' || !empty($data['info']['xsendfile']));
+            $psize = null;
+            if (($this->reqMethod === 'GET' || !$sendData)
+                && elFinder::isSeekableStream($fp)
+                && (array_search('Accept-Ranges: none', headers_list()) === false)) {
+                header('Accept-Ranges: bytes');
+                if (!empty($_SERVER['HTTP_RANGE'])) {
+                    $size = $data['info']['size'];
+                    $end = $size - 1;
+                    if (preg_match('/bytes=(\d*)-(\d*)(,?)/i', $_SERVER['HTTP_RANGE'], $matches)) {
+                        if (empty($matches[3])) {
+                            if (empty($matches[1]) && $matches[1] !== '0') {
+                                $start = $size - $matches[2];
+                            } else {
+                                $start = intval($matches[1]);
+                                if (!empty($matches[2])) {
+                                    $end = intval($matches[2]);
+                                    if ($end >= $size) {
+                                        $end = $size - 1;
+                                    }
+                                    $toEnd = ($end == ($size - 1));
+                                }
+                            }
+                            $psize = $end - $start + 1;
+
+                            header('HTTP/1.1 206 Partial Content');
+                            header('Content-Length: ' . $psize);
+                            header('Content-Range: bytes ' . $start . '-' . $end . '/' . $size);
+
+                            // Apache mod_xsendfile dose not support range request
+                            if (isset($data['info']['xsendfile']) && strtolower($data['info']['xsendfile']) === 'x-sendfile') {
+                                if (function_exists('header_remove')) {
+                                    header_remove($data['info']['xsendfile']);
+                                } else {
+                                    header($data['info']['xsendfile'] . ':');
+                                }
+                                unset($data['info']['xsendfile']);
+                                if ($this->reqMethod !== 'HEAD') {
+                                    $sendData = true;
+                                }
+                            }
+
+                            $sendData && fseek($fp, $start);
+                        }
+                    }
+                }
+                if ($sendData && is_null($psize)) {
+                    elFinder::rewind($fp);
+                }
+            } else {
+                header('Accept-Ranges: none');
+                if (isset($data['info']) && !$data['info']['size']) {
+                    if (function_exists('header_remove')) {
+                        header_remove('Content-Length');
+                    } else {
+                        header('Content-Length:');
+                    }
+                }
+            }
+
+            if ($sendData) {
+                if ($toEnd) {
+                    // PHP < 5.6 has a bug of fpassthru
+                    // see https://bugs.php.net/bug.php?id=66736
+                    if (version_compare(PHP_VERSION, '5.6', '<')) {
+                        file_put_contents('php://output', $fp);
+                    } else {
+                        fpassthru($fp);
+                    }
+                } else {
+                    $out = fopen('php://output', 'wb');
+                    stream_copy_to_stream($fp, $out, $psize);
+                    fclose($out);
+                }
+            }
+
+            if (!empty($data['volume'])) {
+                $data['volume']->close($data['pointer'], $data['info']['hash']);
+            }
+            
+        } else {
+            return self::outputJson($data);
+        }
+    }
+	
+    public static function outputJson($data)
+    {
+        // send header
+        $header = isset($data['header']) ? $data['header'] : self::$contentType;
+        //self::sendHeader($header);
+		
+		$header = explode(': ', $header);
+		//\Yii::$app->request->getHeaders()->add($header[0], $header[1]);
+
+        unset($data['header']);
+
+        if (!empty($data['raw']) && isset($data['error'])) {
+            $out = $data['error'];
+        } else {
+            if (isset($data['debug']) && isset($data['debug']['backendErrors'])) {
+                $data['debug']['backendErrors'] = array_merge($data['debug']['backendErrors'], elFinder::$phpErrors);
+            }
+            $out = json_encode($data);
+        }
+
+        // clear output buffer
+        //while (ob_get_level() && ob_end_clean()) {
+        //}
+
+        //header('Content-Length: ' . strlen($out));
+		//\Yii::$app->request->getHeaders()->add($header[0], $header[1]);
+
+		return $out;
+
+        flush();
     }
 }// END class 
