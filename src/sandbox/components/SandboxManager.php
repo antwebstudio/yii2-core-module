@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 class SandboxManager extends \yii\base\Component {
 	public $gateway = [];
 	public $autoRedirect = false;
+	public $debug = true;
 	
 	protected $_gateway;
 	/*protected $_request;
