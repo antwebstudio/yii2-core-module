@@ -10,11 +10,15 @@ use common\modules\category\models\Category;
 /* @var $this yii\web\View */
 /* @var $model common\modules\article\models\ArticleCategory */
 /* @var $form yii\widgets\ActiveForm */
+
+$language = Yii::$app->request->post('language', Yii::$app->request->get('language', Yii::$app->language));
 ?>
 
 <div class="article-category-form">
 
     <?php $form = ActiveForm::begin(); ?>
+	
+	<?= Html::hiddenInput('language', $language) ?>
     
 	<?php if ($showTypeField && count($categoryTypes)): ?>
 		<?= $form->field($model, 'type')->widget(Select2::classname(), [

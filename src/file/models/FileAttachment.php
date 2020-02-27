@@ -59,7 +59,8 @@ class FileAttachment extends \yii\db\ActiveRecord
 			$url = self::getUrl($attachment);
 			
 			if (self::isImage($attachment)) {
-				$return[] = Html::tag('div', Html::img($url, ['style' => 'width: '.$width.'; height: '.$height.'; object-fit: contain; ']), ['class' => 'background-filter', 	'style' => 'background-image: url(\''.$url.'\');']);
+				$caption = isset($attachment['caption']) && $attachment['caption'] ? Html::tag('div', $attachment['caption'], ['class' => 'slide__caption']) : '';
+				$return[] = Html::tag('div', Html::img($url, ['style' => 'width: '.$width.'; height: '.$height.'; object-fit: contain; ']).$caption, ['class' => 'background-filter', 'style' => 'position: relative; background-image: url(\''.$url.'\');']);
 			} else {
 				$return[] = Html::video($url, ['controls' => 'controls', 'width' => '100%']);
 			}
