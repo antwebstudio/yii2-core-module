@@ -72,7 +72,7 @@ class DefaultController extends Controller
      */
     public function actionIndex($type = 'default')
     {
-		$categoryType = CategoryType::findOne(['name' => $type]);
+		$categoryType = CategoryType::ensure($type);
         $searchModel = new CategorySearch(['type' => CategoryType::getIdFor($type)]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->pagination = false;

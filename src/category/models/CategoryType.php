@@ -26,6 +26,20 @@ class CategoryType extends \yii\db\ActiveRecord
         return '{{%category_type}}';
     }
 	
+	public static function ensure($type, $attributes = []) {
+		$model = self::findOne(['name' => $type]);
+		
+		if (!isset($model)) {
+			$model = new self;
+			$model->attributes = $attributes;
+			$model->name = $type;
+			if (!isset($model->title)) $model->title = \yii\helpers\Inflector::camel2words($model->name);
+			
+			if (!$model->save()) throw new \Exception(print_r($model->errors, 1));
+		}
+		return $model;
+	}
+	
 	public static function getIdFor($type) {
 		if (isset($type)) {
 			if (is_int($type)) {

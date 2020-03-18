@@ -27,7 +27,7 @@ class CategoryController extends Controller
 
     public function actionIndex($type = CategoryType::DEFAULT_NAME, $id = null) {
 		$model = Category::findOne($id);
-        $searchModel = new CategorySearch(['type_id' => CategoryType::getIdFor($type), 'parent' => isset($id) ? $id : Category::find()->rootsOfType($type)->one()]);
+        $searchModel = new CategorySearch(['type' => CategoryType::getIdFor($type), 'parent' => isset($id) ? $id : Category::find()->rootsOfType($type)->one()]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->query->active();
 		
