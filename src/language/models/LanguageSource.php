@@ -4,6 +4,7 @@ namespace ant\language\models;
 class LanguageSource extends \lajax\translatemanager\models\LanguageSource {
 	public static function ensure($category, $message) {
 		if (trim($message) == '') return;
+		if (!is_string($message)) return;
 		
 		$source = self::findOne([
 			'category' => $category,

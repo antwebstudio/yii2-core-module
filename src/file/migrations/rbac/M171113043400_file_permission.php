@@ -18,6 +18,10 @@ class M171113043400_file_permission extends Migration
 	
 	public function init() {
 		$this->permissions = [
+			\ant\file\controllers\ElfinderController::className() => [
+				'tinymce' => ['Manage file', [Role::ROLE_ADMIN]],
+				'connector' => ['Manage file', [Role::ROLE_ADMIN]],
+			],
 			FolderController::className() => [
 				'my-file' => ['View own file', [Role::ROLE_USER]],
 			],

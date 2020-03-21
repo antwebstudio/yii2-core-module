@@ -4,8 +4,11 @@ namespace ant\file\models;
 
 use Yii;
 use yii\imagine\Image;
+use yii\helpers\Url;
+use ant\helpers\StringHelper as Str;
 use ant\helpers\Html;
 use ant\helpers\File;
+use yii\helpers\FileHelper;
 use ant\models\ModelClass;
 
 /**
@@ -56,7 +59,13 @@ class FileAttachment extends \yii\db\ActiveRecord
 	public static function toSliderFormat($attachmentArray, $width = '100%', $height = '420px') {
 		$return = [];
 		foreach ($attachmentArray as $attachment) {
-			$url = self::getUrl($attachment);
+			$thumbHeight = Str::endsWith($height, 'px') ? substr($height, 0, -2) : null;
+			$thumbWidth = Str::endsWith($width, 'px') ? substr($width, 0, -2) : null;
+			if (isset($thumbHeight) || isset($thumbWidth)) {
+				$url = self::thumb($attachment, $thumbWidth, $thumbHeight);
+			} else {
+				$url = self::getUrl($attachment);	
+			}
 			
 			if (self::isImage($attachment)) {
 				$caption = isset($attachment['caption']) && $attachment['caption'] ? Html::tag('div', $attachment['caption'], ['class' => 'slide__caption']) : '';
@@ -74,6 +83,74 @@ class FileAttachment extends \yii\db\ActiveRecord
 	
 	public static function isImage($attachmentArray) {
 		return File::isImageTypeMime($attachmentArray['type']);
+	}
+	
+	public static function generateThumbnail($url, $width = null, $height = null, $fitType = 'fit', $position = null) {
+		$notUrl = true;
+		if ($notUrl) {
+			$fullPathOrUrl = FileHelper::normalizePath(\Yii::$app->fileStorage->getFilesystem()->getAdapter()->applyPathPrefix($url));
+		}
+		
+		$savePath = self::getThumbnailPath($url, $width, $height, $fitType, $position);
+		if (file_exists($savePath)) return $savePath;
+		 
+		try {
+			$img = \Intervention\Image\ImageManagerStatic::make($fullPathOrUrl);
+		} catch (\Intervention\Image\Exception\NotReadableException $ex) {
+			throw new \Exception($ex->getMessage().': '.$fullPathOrUrl);
+		}
+		
+		// Calculation of width/height based on ratio
+		if ($width && $height) {
+		} else if ($width) {
+			$height = (int) ($img->height() / $img->width() * $width);
+		} else if ($height) {
+			$width = (int) ($img->width() / $img->height() * $height);
+		}
+		
+		if ($fitType == 'cover') {
+			$wRatio = $img->width() / $width;
+			$hRatio = $img->height() / $height;
+			$useRatio = min($wRatio, $hRatio);
+			$img->fit((int) ($img->width() / $useRatio), (int) ($img->height() / $useRatio))->crop($width, $height);
+		} else {
+			if ($width && $height) $img->{$fitType}($width, $height, null, $position);
+		}
+
+		\ant\helpers\File::ensureDir(dirname($savePath));
+		//throw new \Exception($savePath);
+		$img->save($savePath);
+		
+		$symlink = \Yii::getAlias('@webroot/thumb');
+		if (!file_exists($symlink)) {			
+			//throw new \Exception(\Yii::getAlias('@webroot/thumb'));
+			symlink(\Yii::getAlias('@runtime/thumbCache'), \Yii::getAlias('@webroot/thumb'));	
+		} else {
+			//throw new \Exception('t'); 
+		}
+		return $img;
+	}
+	
+	public static function getThumbnailPath($url, $width = null, $height = null, $fitType = null, $position = null) {
+		$thumbDir = (isset($width) ? $width : '') . 'x' . (isset($height) ? $height : '') . '/' . $fitType . '/' . $position; // Before calculation of width/ height
+		return FileHelper::normalizePath(\Yii::getAlias('@runtime/thumbCache/'.$thumbDir).$url);
+	}
+	
+	public static function thumb($attachmentArray, $width, $height = null, $fitType = 'fit', $position = null, $pathAttribute = 'path') { 
+		if (is_array($attachmentArray) && !isset($attachmentArray[$pathAttribute])) $attachmentArray = $attachmentArray[0];
+		
+		try {
+			self::generateThumbnail($attachmentArray['path'], $width, $height, $fitType, $position);
+				
+			return Url::to(['/site/thumb', 
+				'url' => $attachmentArray['path'],
+				'width' => $width,
+				'height' => $height,
+				'fitType' => $fitType,
+			]);
+		} catch (\Exception $ex) {
+		}
+		return self::getFirstUrl($attachmentArray);
 	}
 	
 	public static function getFirstUrl($attachmentArray, $useOwnBaseUrl = true, $baseUrlAttribute = 'base_url', $pathAttribute = 'path') {

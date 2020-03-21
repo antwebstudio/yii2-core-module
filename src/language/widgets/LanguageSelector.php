@@ -33,8 +33,9 @@ class LanguageSelector extends \yii\base\Widget {
 			];
 		}
 		
+		$current = $this->getCurrentLanguage();
 		return ButtonDropdown::widget([
-			'label' => $languages[$this->getCurrentLanguage()],
+			'label' => isset($languages[$current]) ? $languages[$current] : $current,
 			'dropdown' => [
 				'items' => $items,
 			],

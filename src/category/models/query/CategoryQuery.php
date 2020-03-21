@@ -16,6 +16,7 @@ class CategoryQuery extends ActiveQuery
 	public function behaviors() {
         return [
             \ant\behaviors\NestedSetsQueryBehavior::className(),
+			\ant\behaviors\AttachBehaviorBehavior::class,
         ];
     }
 	

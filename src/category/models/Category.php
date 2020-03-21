@@ -105,6 +105,7 @@ class Category extends ActiveRecord
     {
         $behaviors = [
             \ant\behaviors\TimestampBehavior::className(),
+			\ant\behaviors\AttachBehaviorBehavior::class,
             [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -178,12 +179,12 @@ class Category extends ActiveRecord
 		}
 		
 		if (\Yii::$app->getModule('translatemanager')) {
-			$behaviors[] = [
+			/*$behaviors[] = [
                 'class' => \ant\language\behaviors\Translatable::className(),
                 'translateAttributes' => ['title', 'subtitle', 'body', 'short_description'],
 				'currentLanguage' => Yii::$app->request->post('language', Yii::$app->request->get('language', Yii::$app->language)),
 				'category' => 'category-{id}',
-            ];
+            ];*/
 		}
 		
 		return $behaviors;

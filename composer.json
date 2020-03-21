@@ -17,7 +17,10 @@
         "creocoder/yii2-nested-sets": "^0.9.0",
         "yiisoft/yii2-bootstrap": "~2.0.0",
 		"2amigos/yii2-taggable-behavior": "~1.0",
-		"antweb/yii2-core" : "*"
+        "barryvdh/elfinder-flysystem-driver": "^0.2.0@dev",
+        "alexantr/yii2-elfinder": "^1.7@dev",
+		"antweb/yii2-core" : "*",
+        "antweb/php-logic": "@dev"
 	},
     "require-dev": {
         "yiisoft/yii2-codeception": "~2.0.0",

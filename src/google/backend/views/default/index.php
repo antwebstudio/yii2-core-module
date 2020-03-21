@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 
 $client = Yii::$app->google;
+$force = isset($_GET['force']);
 
 if ($client->isAuthenticated) {
 	Yii::$app->covid19->storeAccessToken(Yii::$app->google->getAccessToken());
@@ -12,17 +13,21 @@ if ($client->isAuthenticated) {
 	echo '<pre>'.print_r($header, 1).'</pre>';
 	echo '<pre>'.print_r($today, 1).'</pre>'; */
 }
-$names = Yii::$app->cache->get(\ant\google\components\CovidStatistic::CACHE_NAME_CACHE_REGISTERED);
+//$names = Yii::$app->cache->get(\ant\google\components\CovidStatistic::CACHE_NAME_CACHE_REGISTERED);
 
-echo '<pre>'.print_r($names, 1).'</pre>';
-Yii::$app->covid19->flushCache();
-$names = Yii::$app->cache->get(\ant\google\components\CovidStatistic::CACHE_NAME_CACHE_REGISTERED);
+//echo '<pre>'.print_r($names, 1).'</pre>';
+//Yii::$app->covid19->flushCache();
+//$names = Yii::$app->cache->get(\ant\google\components\CovidStatistic::CACHE_NAME_CACHE_REGISTERED);
+//echo '<pre>'.print_r($names, 1).'</pre>';
 
-echo '<pre>'.print_r($names, 1).'</pre>';
-$penang = Yii::$app->covid19->getPenangStatistic();
-$latest = Yii::$app->covid19->getLatestStatistic();
-echo '<pre>'.print_r($latest, 1).'</pre>';
-echo '<pre>'.print_r($penang, 1).'</pre>';
+try {
+	$penang = Yii::$app->covid19->getPenangStatistic($force);
+	$latest = Yii::$app->covid19->getLatestStatistic($force);
+	echo '<pre>'.print_r($latest, 1).'</pre>';
+	echo '<pre>'.print_r($penang, 1).'</pre>';
+} catch (\Exception $ex) {
+	if ($force) throw $ex;
+}
 //print_r(Yii::$app->covid19->retrieveAccessToken());
 
 ?>
