@@ -203,7 +203,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
             $q->alias('group');
             return $q->onCondition(['type' => $type, 'model' => $this->getModelType()]);
         })->joinWith('group group')->onCondition(['group.type' => $type])
-		->groupBy('order');
+		->orderBy('order');
     }
 
     protected function getUploadRelation()

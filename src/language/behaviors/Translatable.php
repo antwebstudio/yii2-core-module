@@ -5,36 +5,39 @@ namespace ant\language\behaviors;
 use Yii;
 use yii\db\BaseActiveRecord;
 use yii\behaviors\AttributeBehavior;
-use lajax\translatemanager\helpers\Language;
-use lajax\translatemanager\models\LanguageSource;
-use lajax\translatemanager\models\LanguageTranslate;
+use ant\language\models\Translatable as TranslatableModel;
+//use lajax\translatemanager\helpers\Language;
+//use lajax\translatemanager\models\LanguageSource;
+//use lajax\translatemanager\models\LanguageTranslate;
 
-class Translatable extends \lajax\translatemanager\behaviors\TranslateBehavior
+class Translatable extends \yii\base\Behavior
 {
 	public $currentLanguage;
+	
+	public $sourceLanguage;
     /**
      * @var array|string
      */
     public $translateAttributes;
+	
+	protected $_translatables = [];
+	protected $_sourceLanguageAttributes = [];
 
-    /**
-     * @var string Category of message.
-     */
-    public $category = 'database';
-
-    /**
-     * @var BaseActiveRecord the owner model of this behavior
-     */
-    public $owner;
+	public function init() {
+		if (!isset($this->sourceLanguage)) $this->sourceLanguage = Yii::$app->sourceLanguage;
+		if (!isset($this->currentLanguage)) $this->currentLanguage = Yii::$app->language;
+	}
 
     /**
      * @inheritdoc
      */
-    public function init()
+    public function events()
     {
-        //parent::init();
-
-        //$this->category = str_replace(['{', '%', '}'], '', $this->category);
+        return [
+            BaseActiveRecord::EVENT_AFTER_FIND => 'translateAttributes',
+            BaseActiveRecord::EVENT_BEFORE_INSERT => 'saveAttributes',
+            BaseActiveRecord::EVENT_BEFORE_UPDATE => 'saveAttributes',
+        ];
     }
 
     /**
@@ -46,86 +49,78 @@ class Translatable extends \lajax\translatemanager\behaviors\TranslateBehavior
     {
         $isAppInSourceLanguage = Yii::$app->sourceLanguage === $this->getCurrentLanguage();
 
-        foreach ($this->translateAttributes as $attribute) {
-            if (!$this->owner->isAttributeChanged($attribute)) {
-                continue;
-            }
-
-            if ($isAppInSourceLanguage || !$this->saveAttributeValueAsTranslation($attribute)) {
-                Language::saveMessage($this->owner->attributes[$attribute], $this->getCategory());
-            }
-        }
+		if (!$isAppInSourceLanguage) {
+			$translated = $this->getTranslatedMessagesByLanguage($this->getCurrentLanguage());
+			foreach ($this->translateAttributes as $attribute) {
+				/* if (!$this->owner->isAttributeChanged($attribute)) {
+					continue;
+				} */
+				$translated[$attribute] = $this->owner->{$attribute};
+				
+				$this->owner->{$attribute} = isset($this->_sourceLanguageAttributes[$attribute]) ? $this->_sourceLanguageAttributes[$attribute] : null;
+			}
+			$this->saveTranslatedByLanguage($translated, $this->getCurrentLanguage());
+		}
     }
-	
-	protected function getCurrentLanguage() {
-		return isset($this->currentLanguage) ? $this->currentLanguage : (is_object(Yii::$app->language) ? Yii::$app->language->name : Yii::$app->language);
-	}
-	
-	protected function getCategory() {
-		return strtr($this->category, [
-			'{id}' => $this->owner->id,
-		]);
-	}
 	
 	public function translateAttributes($event)
     {
-        foreach ($this->translateAttributes as $attribute) {
-            $this->owner->{$attribute} = Yii::t($this->getCategory(), $this->owner->attributes[$attribute], [], $this->getCurrentLanguage());
-        }
+        $isAppInSourceLanguage = Yii::$app->sourceLanguage === $this->getCurrentLanguage();
+		
+		if (!$isAppInSourceLanguage) {
+			$translated = $this->getTranslatedMessagesByLanguage($this->currentLanguage);
+			foreach ($this->translateAttributes as $attribute) {
+				$this->_sourceLanguageAttributes[$attribute] = $this->owner->{$attribute};
+				
+				if (isset($translated[$attribute])) {
+					$this->owner->{$attribute} = $translated[$attribute];
+				} else {
+					// Should set to $this->owner->{$attribute} as empty?
+				}
+			}
+		}
     }
-
-    /**
-     * @param string $attribute The name of the attribute.
-     *
-     * @return bool Whether the translation is saved.
-     */
-    private function saveAttributeValueAsTranslation($attribute)
-    {
-        $sourceMessage = $this->owner->getOldAttribute($attribute);
-        $translatedMessage = $this->owner->attributes[$attribute];
-
-        // Restore the original value, so it won't be replaced with the translation in the database.
-        $this->owner->{$attribute} = $sourceMessage;
-
-        $translateSource = $this->findSourceMessage($sourceMessage);
-        if (!$translateSource) {
-            return false; // The source does not exist, the message cannot be saved as translation.
-        }
-
-        $translation = new LanguageTranslate();
-        foreach ($translateSource->languageTranslates as $tmpTranslate) {
-            if ($tmpTranslate->language === $this->getCurrentLanguage()) {
-                $translation = $tmpTranslate;
-                break;
-            }
-        }
-
-        if ($translation->isNewRecord) {
-            $translation->id = $translateSource->id;
-            $translation->language = $this->getCurrentLanguage();
-        }
-
-        $translation->translation = $translatedMessage;
-        $translation->save();
-
-        return true;
-    }
-
-    /**
-     * Finds the source record with case sensitive match.
-     *
-     * @param string $message
-     *
-     * @return LanguageSource|null Null if the source is not found.
-     */
-    private function findSourceMessage($message)
-    {	
-        $sourceMessages = LanguageSource::findAll(['message' => $message, 'category' => $this->getCategory()]);
-
-        foreach ($sourceMessages as $source) {
-            if ($source->message === $message) {
-                return $source;
-            }
-        }
-    }
+	
+	protected function saveTranslatedByLanguage($translated, $language) {
+		$translatable = $this->getTranslatableByLanguage($language);
+		if (!isset($translatable)) {
+			$translatable = new TranslatableModel;
+			$translatable->language = $this->getCurrentLanguage();
+			$translatable->translatable_id = $this->owner->id; 
+			$translatable->translatable_class_id = \ant\models\ModelClass::getClassId($this->owner);
+		}
+		$translatable->translated = $translated;
+		
+		if (!$translatable->save()) throw new \Exception(print_r($translatable->errors, 1));
+	}
+	
+	protected function getCurrentLanguage() {
+		// May implement aliases of language in future
+		return $this->currentLanguage;
+	}
+	
+	protected function getTranslatedMessagesByLanguage($language) {
+		$translatable = $this->getTranslatableByLanguage($language);
+		return isset($translatable) ? $translatable->translated : [];
+	}
+	
+	protected function getTranslatableByLanguage($language) {
+		if (!isset($this->_translatables[$language])) {
+			$this->_translatables[$language] = $this->owner->getTranslatable($language)->one();
+		}
+		return $this->_translatables[$language];
+	}
+	
+	public function getTranslatables() {
+		return $this->owner->hasMany(TranslatableModel::class, ['translatable_id' => 'id'])
+			->onCondition(['translatable_class_id' => \ant\models\ModelClass::getClassId($this->owner)]);
+	}
+	
+	public function getTranslatable($language) {
+		return $this->owner->hasMany(TranslatableModel::class, ['translatable_id' => 'id'])
+			->onCondition([
+				'language' => $language,
+				'translatable_class_id' => \ant\models\ModelClass::getClassId($this->owner)
+			]);
+	}
 }

@@ -2,8 +2,9 @@
 namespace ant\language\controllers;
 
 class DefaultController extends \yii\web\Controller {
-	public function actionLanguage($language) {
+	public function actionLanguage($language, $redirect = null) {
 		\Yii::$app->session->set(\ant\language\Module::SESSION_LANGUAGE, $language);
-		return $this->redirect(\Yii::$app->request->referrer ?: \Yii::$app->homeUrl);
+		$redirect = isset($redirect) ? $redirect : \Yii::$app->request->referrer;
+		return $this->redirect($redirect ?: \Yii::$app->homeUrl);
 	}
 }
