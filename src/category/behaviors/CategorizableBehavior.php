@@ -116,6 +116,7 @@ class CategorizableBehavior extends Behavior
   
   public function getCategoriesRelation($categoryType = CategoryType::DEFAULT_NAME) {
 	$query = $this->owner->hasMany(Category::className(), ['id' => 'category_id'])
+		->cache(7200)
 		->viaTable('{{%category_map}}', ['model_id' => 'id'], function ($query) use ($categoryType) {
 			$conditions = [
 				'{{%category_map}}.model_class_id' => \ant\models\ModelClass::getClassId(get_class($this->owner)),

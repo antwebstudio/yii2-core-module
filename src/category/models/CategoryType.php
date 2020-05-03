@@ -27,7 +27,7 @@ class CategoryType extends \yii\db\ActiveRecord
     }
 	
 	public static function ensure($type, $attributes = []) {
-		$model = self::findOne(['name' => $type]);
+		$model = self::find()->cache(7200)->andWhere(['name' => $type])->one();
 		
 		if (!isset($model)) {
 			$model = new self;
@@ -45,7 +45,7 @@ class CategoryType extends \yii\db\ActiveRecord
 			if (is_int($type)) {
 				return $type;
 			} else {
-				$model = self::findOne(['name' => $type]);
+				$model = self::find()->cache(7200)->andWhere(['name' => $type])->one();
 				if (!isset($model)) {
 					$model = new self;
 					$model->name = $type;

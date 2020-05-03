@@ -202,7 +202,8 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
         ->via('fileAttachmentGroup', function($q) use ($type) { 
             $q->alias('group');
             return $q->onCondition(['type' => $type, 'model' => $this->getModelType()]);
-        })->joinWith('group group')->onCondition(['group.type' => $type])
+        })//->onCondition(['group.type' => $type])
+		->cache(7200)
 		->orderBy('order');
     }
 
@@ -214,6 +215,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     
     public function getFileAttachmentGroup() {
         return $this->owner->hasOne(FileAttachmentGroup::className(), ['model_id' => 'id'])
+			->cache(7200)
             ->onCondition(['model' => $this->getModelType(), 'type' => $this->type]);
     }
 	
@@ -221,8 +223,9 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
 		return \ant\models\ModelClass::getClassId($this->owner);
 		return $this->modelType;
     }
+	
     protected function ensureAttachmentGroup() {
-        $group = $this->getFileAttachmentGroup()->one();
+        $group = $this->getFileAttachmentGroup()->cache(7200)->one();
         if (!$group) {
             $group = new FileAttachmentGroup;
             $group->model = $this->getModelType();
@@ -259,7 +262,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     {
         $modelClass = $this->getUploadModelClass();
         foreach ($files as $file) {
-            $model = $modelClass::find()->joinWith('group group')
+            $model = $modelClass::find()->cache(7200)->joinWith('group group')
             ->andWhere(['group.type' => $this->type,
                 'group.model' => $this->getModelType(),
                 $this->getAttributeField('path') => $file['path']])

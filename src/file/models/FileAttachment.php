@@ -173,8 +173,8 @@ class FileAttachment extends \yii\db\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class' => 'ant\behaviors\SerializeBehavior',
-				'serializeMethod' => \ant\behaviors\SerializeBehavior::METHOD_JSON,
+				'class' => \ant\behaviors\SerializableAttribute::class,
+				'serializeMethod' => \ant\behaviors\SerializableAttribute::METHOD_JSON,
 				'attributes' => ['data'],
 			],
 			[
