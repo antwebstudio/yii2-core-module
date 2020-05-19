@@ -198,14 +198,30 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     }
 
     public function getAttachmentsRelation($type) {
-        return $this->owner->hasMany(FileAttachment::className(), ['group_id' => 'id'])
+        //$dependency = new \yii\caching\DbDependency(['sql' => FileAttachment::find()->select('MAX(created_at)')->createCommand()->getRawSql()]);
+		$dependency = new \yii\caching\TagDependency(['reusable' => true, 'tags' => $this->getCacheTags()]);
+		
+		return $this->owner->hasMany(FileAttachment::className(), ['group_id' => 'id'])
         ->via('fileAttachmentGroup', function($q) use ($type) { 
             $q->alias('group');
             return $q->onCondition(['type' => $type, 'model' => $this->getModelType()]);
         })//->onCondition(['group.type' => $type])
-		->cache(7200)
+		->cache(7200, $dependency)
 		->orderBy('order');
     }
+	
+	protected function invalidateCache() {
+		if (isset(\Yii::$app->frontendCache)) {
+			\yii\caching\TagDependency::invalidate(\Yii::$app->frontendCache, $this->getCacheTags());
+		}
+		if (isset(\Yii::$app->cache)) {
+			\yii\caching\TagDependency::invalidate(\Yii::$app->cache, $this->getCacheTags());
+		}
+	}
+	
+	protected function getCacheTags() {
+		return get_class($this->owner).'-'.$this->owner->id;
+	}
 
     protected function getUploadRelation()
     {
@@ -240,6 +256,8 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
      */
     protected function saveFilesToRelation($files)
     {
+		$this->invalidateCache();
+		
         $modelClass = $this->getUploadModelClass();
         $group = $this->ensureAttachmentGroup();
 
