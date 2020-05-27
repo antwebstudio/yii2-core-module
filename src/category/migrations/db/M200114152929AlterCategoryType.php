@@ -16,6 +16,7 @@ class M200114152929AlterCategoryType extends Migration
     public function safeUp()
     {
 		$this->addColumn($this->tableName, 'is_hierarchical', $this->boolean()->defaultValue(1));
+		$this->addColumn($this->tableName, 'is_uncategorized_show', $this->boolean()->defaultValue(1));
 		$this->addColumn($this->tableName, 'visible_fields', $this->string()->null()->defaultValue(null));
 		$this->addColumn($this->tableName, 'required_fields', $this->string()->null()->defaultValue(null));
     }
@@ -26,6 +27,7 @@ class M200114152929AlterCategoryType extends Migration
     public function safeDown()
     {
         $this->dropColumn($this->tableName, 'is_hierarchical');
+        $this->dropColumn($this->tableName, 'is_uncategorized_show');
         $this->dropColumn($this->tableName, 'visible_fields');
         $this->dropColumn($this->tableName, 'required_fields');
     }

@@ -57,7 +57,9 @@ class Translatable extends \yii\base\Behavior
 				} */
 				$translated[$attribute] = $this->owner->{$attribute};
 				
-				$this->owner->{$attribute} = isset($this->_sourceLanguageAttributes[$attribute]) ? $this->_sourceLanguageAttributes[$attribute] : null;
+				if (isset($this->_sourceLanguageAttributes[$attribute])) {
+					$this->owner->{$attribute} = $this->_sourceLanguageAttributes[$attribute];
+				}
 			}
 			$this->saveTranslatedByLanguage($translated, $this->getCurrentLanguage());
 		}

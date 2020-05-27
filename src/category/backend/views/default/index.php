@@ -15,6 +15,10 @@ $typeName = isset($categoryType->title) ? $categoryType->title : 'Category';
 $this->title = 'Manage '.$categoryType->title;
 $this->params['title'] = $this->title;
 $this->params['breadcrumbs'][] = $this->title;
+
+if (!$categoryType->is_uncategorized_show) {
+	$dataProvider->query->andWhere(['>', 'category.depth', 0]);
+}
 ?>
 <div class="article-category-index">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -64,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'delete' => function($model, $key) {
                         $controllerClassName = \ant\category\backend\controllers\DefaultController::className();
-                        return Permission::can('delete', $controllerClassName);
+                        return !$model->isRoot() && Permission::can('delete', $controllerClassName);
                     },
                 ],
             ],
