@@ -31,6 +31,11 @@ class CategorySearchCest
 		
 		$categoryType = $I->grabFixture('categoryType')->getModel('empty');
 		
+		$search = new CategorySearch(['type' => $categoryType->id]);
+		$dataProvider = $search->search([]);
+		
+		$I->assertEquals(0, $dataProvider->totalCount);
+		
 		$search = new CategorySearch(['type_id' => $categoryType->id]);
 		$dataProvider = $search->search([]);
 		

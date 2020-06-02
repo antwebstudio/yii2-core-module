@@ -137,7 +137,6 @@ class TestClass extends \yii\base\Model implements \ant\interfaces\GetterSetterT
         return ArrayHelper::merge(parent::behaviors(), [
             [
                 'class' => \ant\behaviors\AttachBehaviorBehavior::className(),
-                'config' => '@common/config/behaviors.php',
             ],
 			'dynamicAttribute' => [
 				'class' => \ant\behaviors\DynamicAttribute::className(),

@@ -23,7 +23,7 @@ class CategorySearch extends Category
         return [
             [['attachments', 'attachments2', 'thumbnail', 'banner', 'parent'], 'safe'],
             [['id', 'parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['slug', 'title', 'body', 'subtitle', 'type'], 'safe'],
+            [['slug', 'title', 'body', 'subtitle', 'type', 'type_id'], 'safe'],
         ];
     }
 
@@ -67,11 +67,16 @@ class CategorySearch extends Category
             $query->childrenOf($this->parent_id, 1);
 		}
 		
-		if (is_null($this->type)) {
-			$query->andWhere(['type_id' => null]);
-		} else {
+		if (isset($this->type)) {
 			$query->typeOf($this->type);
-		}
+		} else if (isset($this->type_id)) {
+			$query->andWhere(['type_id' => $this->type_id]);
+		} else if (is_null($this->type)) {
+			$query->andWhere(['type_id' => null]);
+		} else if (is_null($this->type_id)) {
+			$query->andWhere(['type_id' => null]);
+		} 
+		
 		if (isset($this->parent)) {
 			$query->childrenOf($this->parent, 1);
 		}

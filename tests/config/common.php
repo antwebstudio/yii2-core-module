@@ -5,7 +5,7 @@ return [
 	'aliases' => [
 		'ant' => dirname(dirname(__DIR__)).'/src',
 		'api' => dirname(dirname(__DIR__)).'/src/api',
-		'common/config' => __DIR__, // dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/config',
+		'project/config' => __DIR__, // dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/config',
 		'vendor' => dirname(dirname(__DIR__)).'/vendor',
 		'@common/migrations' => '@vendor/inspirenmy/yii2-core/src/common/migrations',
 		'common/modules/moduleManager' => dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/modules/moduleManager',
@@ -39,13 +39,9 @@ return [
 			},
         ],
         'moduleManager' => [
-            'class' => 'ant\moduleManager\components\ModuleManager',
+            'class' => 'ant\moduleManager\ModuleManager',
 			'moduleAutoloadPaths' => [
 				'@ant',
-				'@ant', 
-				'@vendor/inspirenmy/yii2-ecommerce/src/common/modules', 
-				'@vendor/inspirenmy/yii2-user/src/common/modules',
-				'@vendor/inspirenmy/yii2-core/src/common/modules',
 			],
         ],
 		// Needed for rbca migration, else error occured when run yii migrate

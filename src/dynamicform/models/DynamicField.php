@@ -4,7 +4,7 @@ namespace ant\dynamicform\models;
 use yii\helpers\Html;
 use yii\db\ActiveRecord;
 use ant\behaviors\TimestampBehavior;
-use ant\behaviors\SerializeBehavior;
+use ant\behaviors\SerializableAttribute;
 use ant\dynamicform\models\DynamicForm;
 use ant\dynamicform\base\FieldTypes;
 
@@ -29,7 +29,7 @@ class DynamicField extends ActiveRecord
 				'class' => TimestampBehavior::className(),
 			],
             [
-                'class' => SerializeBehavior::className(),
+                'class' => SerializableAttribute::class,
                 'attributes' => ['setting'],
             ],
 		];

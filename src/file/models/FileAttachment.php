@@ -202,7 +202,7 @@ class FileAttachment extends \yii\db\ActiveRecord
     {
         return [
             [['path'], 'required'],
-            [['order', 'size', 'created_at'], 'integer'],
+            [['order', 'size'], 'integer'],
             [['path', 'base_url', 'type', 'name'], 'string', 'max' => 255],
 			[['model', 'model_class_id', 'model_id', 'caption', 'description', 'data'], 'safe'],
         ];

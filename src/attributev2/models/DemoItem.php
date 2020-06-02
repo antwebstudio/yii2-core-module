@@ -18,7 +18,6 @@ class DemoItem extends ActiveRecord
 		return [
 			[
                 'class' => AttachBehaviorBehavior::className(),
-                'config' => '@common/config/behaviors.php',
             ],
 			'datetimeAttribute' => [
 				'class' => DateTimeAttributeBehavior::className(),

@@ -71,11 +71,9 @@ class ContactForm extends \yii\db\ActiveRecord
 			],
 			[
 				'class' => \ant\behaviors\AttachBehaviorBehavior::className(),
-                'config' => '@common/config/behaviors.php',
 			],
 			[
-				'class' => \ant\behaviors\SerializeBehavior::className(),
-				'serializeMethod' => \ant\behaviors\SerializeBehavior::METHOD_JSON,
+				'class' => \ant\behaviors\SerializableAttribute::class,
 				'attributes' => ['data'],
 			],
 			[

@@ -15,7 +15,6 @@ class DemoItemSearch extends DemoItem
         return [
             [
                 'class' => AttachBehaviorBehavior::className(),
-                'config' => '@common/config/behaviors.php',
             ],
         ];
     }

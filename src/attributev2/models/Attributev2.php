@@ -5,7 +5,7 @@ namespace ant\attributev2\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use ant\behaviors\TimestampBehavior;
-use ant\behaviors\SerializeBehavior;
+use ant\behaviors\SerializableAttribute;
 use ant\behaviors\DefaultValueBehavior;
 use ant\attributev2\components\FieldType;
 
@@ -33,8 +33,7 @@ class Attributev2 extends \yii\db\ActiveRecord
         return [
             ['class' => TimestampBehavior::className()],
             [
-                'class' => SerializeBehavior::className(),
-                'serializeMethod' => SerializeBehavior::METHOD_JSON,
+                'class' => SerializableAttribute::class,
                 'attributes' => ['rules', 'fieldtype_setting'],
             ],
             [
