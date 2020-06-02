@@ -198,29 +198,29 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     }
 
     public function getAttachmentsRelation($type) {
-        //$dependency = new \yii\caching\DbDependency(['sql' => FileAttachment::find()->select('MAX(created_at)')->createCommand()->getRawSql()]);
-		$dependency = new \yii\caching\TagDependency(['reusable' => true, 'tags' => $this->getCacheTags()]);
-		
 		return $this->owner->hasMany(FileAttachment::className(), ['group_id' => 'id'])
         ->via('fileAttachmentGroup', function($q) use ($type) { 
             $q->alias('group');
             return $q->onCondition(['type' => $type, 'model' => $this->getModelType()]);
         })//->onCondition(['group.type' => $type])
-		->cache(7200, $dependency)
+		->cache(7200, $this->getCacheDependency())
 		->orderBy('order');
     }
 	
-	protected function invalidateCache() {
-		if (isset(\Yii::$app->frontendCache)) {
-			\yii\caching\TagDependency::invalidate(\Yii::$app->frontendCache, $this->getCacheTags());
-		}
-		if (isset(\Yii::$app->cache)) {
-			\yii\caching\TagDependency::invalidate(\Yii::$app->cache, $this->getCacheTags());
-		}
-	}
-	
 	protected function getCacheTags() {
 		return get_class($this->owner).'-'.$this->owner->id;
+	}
+	
+	protected function getCacheDependency() {
+		return new \yii\caching\TagDependency(['tags' => $this->getCacheTags()]);
+	}
+	
+	protected function invalidateCache() {
+		foreach (['cache', 'frontendCache', 'backendCache'] as $cacheComponent) {
+			if (isset(\Yii::$app->{$cacheComponent})) {
+				\yii\caching\TagDependency::invalidate(\Yii::$app->{$cacheComponent}, $this->getCacheTags());
+			}
+		}
 	}
 
     protected function getUploadRelation()
@@ -229,10 +229,10 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
         return $this->owner->{$getter}();
     }
     
-    public function getFileAttachmentGroup() {
+    public function getFileAttachmentGroup($type = null) {
         return $this->owner->hasOne(FileAttachmentGroup::className(), ['model_id' => 'id'])
-			->cache(7200)
-            ->onCondition(['model' => $this->getModelType(), 'type' => $this->type]);
+			->cache(7200, $this->getCacheDependency())
+            ->onCondition(['model' => $this->getModelType(), 'type' => $type]);
     }
 	
 	protected function getModelType() {
@@ -241,12 +241,14 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     }
 	
     protected function ensureAttachmentGroup() {
-        $group = $this->getFileAttachmentGroup()->cache(7200)->one();
+        $group = $this->getFileAttachmentGroup($this->type)->one();
         if (!$group) {
             $group = new FileAttachmentGroup;
             $group->model = $this->getModelType();
             $group->type = $this->type;
             $this->owner->link('fileAttachmentGroup', $group, $this->linkModelExtraAttributes);
+			
+			$this->invalidateCache();
         }
         return $group;
     }
@@ -256,8 +258,6 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
      */
     protected function saveFilesToRelation($files)
     {
-		$this->invalidateCache();
-		
         $modelClass = $this->getUploadModelClass();
         $group = $this->ensureAttachmentGroup();
 
@@ -271,6 +271,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
             }
             $group->link('attachments', $model);
         }
+		$this->invalidateCache();
     }
 
     /**
@@ -280,7 +281,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
     {
         $modelClass = $this->getUploadModelClass();
         foreach ($files as $file) {
-            $model = $modelClass::find()->cache(7200)->joinWith('group group')
+            $model = $modelClass::find()->cache(7200, $this->getCacheDependency())->joinWith('group group')
             ->andWhere(['group.type' => $this->type,
                 'group.model' => $this->getModelType(),
                 $this->getAttributeField('path') => $file['path']])
@@ -293,6 +294,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
                 $model->save(false);
             }
         }
+		$this->invalidateCache();
     }
 
     public function afterUpdateMultiple()

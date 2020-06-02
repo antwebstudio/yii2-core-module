@@ -13,6 +13,9 @@ class AttachmentBehaviorCest
     {
 		Yii::configure(Yii::$app, [
 			'components' => [
+				'cache' => [
+					'class' => \yii\caching\FileCache::class,
+				],
 				'fileStorage' => [
 					'class' => '\trntv\filekit\Storage',
 					'baseUrl' => $this->baseUrl,
@@ -33,6 +36,32 @@ class AttachmentBehaviorCest
     {
 	}
 	
+	public function testCreate(UnitTester $I) {
+		$filename = 'file/720x480.png';
+		
+		$model = new AttachmentBehaviorCestTestModel;
+		$model->attributes = [
+			'picture' => [
+				[
+					'path' => $filename,
+				]
+			],
+		];
+		if (!$model->save()) throw new \Exception(print_r($model->errors, 1));
+		
+		$attachmentGroupId = $model->fileAttachmentGroup->id;
+		
+		if (!$model->save()) throw new \Exception(print_r($model->errors, 1));
+		
+		$I->assertEquals($attachmentGroupId, $model->getFileAttachmentGroup('default')->one()->id);
+		
+		$model = AttachmentBehaviorCestTestModel::findOne($model->id);
+		
+		$I->assertEquals($attachmentGroupId, $model->getFileAttachmentGroup('default')->one()->id);
+		
+		$I->assertEquals($filename, $model->picture[0]['path']);
+	}
+	
     public function testSaveUpdate(UnitTester $I)
     {
 		$filename = 'file/720x480.png';
@@ -40,7 +69,6 @@ class AttachmentBehaviorCest
 
 		$model = new AttachmentBehaviorCestTestModel;
 		$model->attributes = [
-			'name' => 'test name',
 			'picture' => [
 				[
 					'path' => $filename,
