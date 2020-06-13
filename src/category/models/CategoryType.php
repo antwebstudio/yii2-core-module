@@ -27,7 +27,8 @@ class CategoryType extends \yii\db\ActiveRecord
     }
 	
 	public static function ensure($type, $attributes = []) {
-		$model = self::find()->cache(7200)->andWhere(['name' => $type])->one();
+		$dependency = new \yii\caching\TagDependency(['tags' => self::class]);
+		$model = self::find()->cache(7200, $dependency)->andWhere(['name' => $type])->one();
 		
 		if (!isset($model)) {
 			$model = new self;
@@ -36,6 +37,10 @@ class CategoryType extends \yii\db\ActiveRecord
 			if (!isset($model->title)) $model->title = \yii\helpers\Inflector::camel2words($model->name);
 			
 			if (!$model->save()) throw new \Exception(print_r($model->errors, 1));
+			
+			if(isset(\Yii::$app->cache)) \yii\caching\TagDependency::invalidate(\Yii::$app->cache, self::class);
+			if(isset(\Yii::$app->frontendCache)) \yii\caching\TagDependency::invalidate(\Yii::$app->frontendCache, self::class);
+			if(isset(\Yii::$app->backendCache)) \yii\caching\TagDependency::invalidate(\Yii::$app->backendCache, self::class);
 		}
 		return $model;
 	}
@@ -45,13 +50,18 @@ class CategoryType extends \yii\db\ActiveRecord
 			if (is_int($type)) {
 				return $type;
 			} else {
-				$model = self::find()->cache(7200)->andWhere(['name' => $type])->one();
+				$dependency = new \yii\caching\TagDependency(['tags' => self::class]);
+				$model = self::find()->cache(7200, $dependency)->andWhere(['name' => $type])->one();
 				if (!isset($model)) {
 					$model = new self;
 					$model->name = $type;
 					$model->title = \yii\helpers\Inflector::camel2words($type);
 					
 					if (!$model->save()) throw new \Exception(print_r($model->errors, 1));
+			
+					if(isset(\Yii::$app->cache)) \yii\caching\TagDependency::invalidate(\Yii::$app->cache, self::class);
+					if(isset(\Yii::$app->frontendCache)) \yii\caching\TagDependency::invalidate(\Yii::$app->frontendCache, self::class);
+					if(isset(\Yii::$app->backendCache)) \yii\caching\TagDependency::invalidate(\Yii::$app->backendCache, self::class);
 				}
 				return $model->id;
 			}

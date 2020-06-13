@@ -162,7 +162,7 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
         $model->delete();
 
-        return $this->redirect(['index', 'type' => $model->type]);
+        return $this->redirect(\Yii::$app->request->referrer ?: ['index']);
     }
 
     /**

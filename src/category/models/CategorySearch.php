@@ -45,7 +45,7 @@ class CategorySearch extends Category
      */
     public function search($params)
     {
-        $query = Category::find()->joinWith('type type');
+        $query = Category::find()->alias('category')->joinWith('type type');
 
         // add conditions that should always apply here
 
@@ -88,10 +88,10 @@ class CategorySearch extends Category
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'body', $this->body])
-            ->andFilterWhere(['like', 'subtitle', $this->subtitle]);
+        $query->andFilterWhere(['like', 'category.slug', $this->slug])
+            ->andFilterWhere(['like', 'category.title', $this->title])
+            ->andFilterWhere(['like', 'category.body', $this->body])
+            ->andFilterWhere(['like', 'category.subtitle', $this->subtitle]);
             
         return $dataProvider;
     }

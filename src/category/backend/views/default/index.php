@@ -52,8 +52,10 @@ if (!$categoryType->is_uncategorized_show) {
 				'moveElementUrl' => ['/category/backend/category/move-tree-node'],
 			],
             [
-                'label' => 'Updated At',
-                'attribute' => 'updated_at',
+				'visible' => false,
+				'filter' => false,
+                'label' => 'Date',
+                'attribute' => 'created_at',
             ],
             // 'subtitle',
             // 'icon_base_url:url',
