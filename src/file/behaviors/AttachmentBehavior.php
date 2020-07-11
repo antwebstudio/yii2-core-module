@@ -14,7 +14,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
 
 	public $linkModelExtraAttributes = [];
 	public $modelType;
-    public $uploadRelation = 'fileAttachments';
+    public $uploadRelation;
     public $type = 'default';
 	
     public $pathAttribute = 'path';
@@ -225,8 +225,12 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
 
     protected function getUploadRelation()
     {
-        $getter = 'get'.ucfirst($this->uploadRelation);
-        return $this->owner->{$getter}();
+		if (isset($this->uploadRelation)) {
+			$getter = 'get'.ucfirst($this->uploadRelation);
+			return $this->owner->{$getter}();
+		} else {
+			return $this->getAttachmentsRelation($this->type);
+		}
     }
     
     public function getFileAttachmentGroup($type = null) {
