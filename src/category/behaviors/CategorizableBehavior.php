@@ -119,14 +119,26 @@ class CategorizableBehavior extends Behavior
 		->cache(7200)
 		->viaTable('{{%category_map}}', ['model_id' => 'id'], function ($query) use ($categoryType) {
 			$conditions = [
-				'{{%category_map}}.model_class_id' => \ant\models\ModelClass::getClassId(get_class($this->owner)),
+        'or', [
+          '{{%category_map}}.model_class_id' => \ant\models\ModelClass::getClassId(get_class($this->owner)),
+        ],
+        [
+          '{{%category_map}}.model_class_id' => null,
+        ],
 			];
 			
-			if ($categoryType != '*' && isset($categoryType)) {
-				$conditions['{{%category_map}}.category_type_id'] = CategoryType::getIdFor($categoryType);
-			}
-			
 			$query->andWhere($conditions);
+			
+			if ($categoryType != '*' && isset($categoryType)) {
+				$query->andWhere([
+          'or', [
+            '{{%category_map}}.category_type_id' => CategoryType::getIdFor($categoryType),
+          ],
+          [
+            '{{%category_map}}.category_type_id' => null,
+          ],
+        ]);
+			}
 		});
 		
 	/*if (isset($categoryType)) {

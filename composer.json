@@ -20,6 +20,7 @@
         "barryvdh/elfinder-flysystem-driver": "^0.2.0@dev",
         "alexantr/yii2-elfinder": "^1.7@dev",
 		"antweb/yii2-core" : "*",
+		"antweb/yii2-user" : "*",
         "antweb/php-logic": "@dev"
 	},
     "require-dev": {
@@ -35,7 +36,7 @@
         },
 		{
 			"type": "composer",
-			"url": "http://packagist.antwebstudio.com"
+			"url": "https://packagist.antwebstudio.com"
 		}
 	],
 	"scripts": {

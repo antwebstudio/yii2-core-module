@@ -116,9 +116,23 @@ class CategorizableBehaviorCest
 		$I->assertEquals(1, count($model->anotherCategories_ids));
 		$I->assertEquals($anotherCategory->id, $model->anotherCategories[0]->id);
 		$I->assertEquals([$anotherCategory->id], $model->anotherCategories_ids);
-    }
+	}
 	
-	protected function createCategory($categoryTypeId) {
+	public function testGetCategoriesForJoinWith(UnitTester $I) {
+		$category = $this->createCategory($I->grabFixture('categoryType')->getModel(0)->id);
+
+		$model1 = new CategorizableBehaviorCestModel;
+		$model1->categories_ids = [$category->id];
+		if (!$model1->save()) throw new \Exception(print_r($model1->errors, 1));
+		
+		$model2 = new CategorizableBehaviorCestModel;
+		if (!$model2->save()) throw new \Exception(print_r($model2->errors, 1));
+		
+		$query = CategorizableBehaviorCestModel::find()->joinWith('categories categories');
+		$I->assertEquals(2, $query->count());
+	}
+	
+	protected function createCategory($categoryTypeId = null) {
 		$model = new Category(['type_id' => $categoryTypeId]);
 		$model->title = 'new test category';
 		
