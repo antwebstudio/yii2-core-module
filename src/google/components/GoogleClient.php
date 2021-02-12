@@ -15,6 +15,8 @@ class GoogleClient extends \yii\base\Component {
 	
 	protected $_client;
 	protected $_authenticator;
+	protected $_accessToken;
+	protected $_api;
 	
 	public function init() {
 		$this->_client = \Ttskch\GoogleSheetsApi\Factory\GoogleClientFactory::createOAuthClient(
@@ -48,20 +50,35 @@ class GoogleClient extends \yii\base\Component {
 	public function getIsAuthenticated() {
 		return isset($this->accessToken);
 	}
+
+	public function getApi() {
+		if (!isset($this->_api)) {
+			$this->_api = \Ttskch\GoogleSheetsApi\Factory\ApiClientFactory::create($this->_client);
+		}
+		return $this->_api;
+	}
 	
 	public function getSpreadSheet($spreadsheetId, $range) {
-		$api = \Ttskch\GoogleSheetsApi\Factory\ApiClientFactory::create($this->_client);
+		$api = $this->getApi();
 
 		$response = $api->getGoogleService()->spreadsheets_values->get($spreadsheetId, $range);
 		return $response->getValues();
 	}
 	
 	public function setAccessToken($token) {
-		$this->_client->setAccessToken($token);
+		$this->_accessToken = $token;
+		if (isset($this->_client)) {
+			$this->_client->setAccessToken($token);
+		}
 	}
 	
 	public function getAccessToken() {
-		return $this->session->get(self::SESSION_NAME);
+		if (isset($this->_accessToken)) {
+			return $this->_accessToken;
+		}
+		if (isset($this->session)) {
+			return $this->session->get(self::SESSION_NAME);
+		}
 	}
 	
 	public function logout() {
@@ -73,6 +90,6 @@ class GoogleClient extends \yii\base\Component {
 	}
 	
 	protected function getSession() {
-		return Yii::$app->session;
+		return isset(Yii::$app->session) ? Yii::$app->session : null;
 	}
 }
