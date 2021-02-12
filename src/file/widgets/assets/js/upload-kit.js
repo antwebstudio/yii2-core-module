@@ -178,7 +178,8 @@
                 // Custom fields
                 if (options.fields) {
                     var widgetId = $input.attr('id');
-                    var customFields = $('<div/>', {"id": "widget-" + widgetId + "-" + index, "class": "upload-custom-field-group"});
+                    var fieldId = "widget-" + widgetId + "-" + index;
+                    var customFields = $('<div/>', {"id": fieldId, "class": "upload-custom-field-group"});
 
                     for (var i in options.fields) {
                         var field = options.fields[i];
@@ -189,12 +190,23 @@
                         fieldAttributes.value = methods.getValue(file, fieldAttributes.name);
                         fieldAttributes.name = name + fieldAttributes.name;
 
+                        // Label
                         formField.append($('<label/>').append(fieldAttributes.label));
                         
                         delete fieldAttributes.tag;
                         delete fieldAttributes.label;
 
-                        formField.append($('<' + tag + '/>', fieldAttributes));
+                        // Cropper
+                        if (tag == 'img') {
+                            var cropper = $('<div/>');
+                            fieldAttributes.src = file[options.baseUrlAttribute] + '/' + file[options.pathAttribute];
+                            fieldAttributes.field = fieldId + '-cropper';
+                            cropper.append($('<img/>', fieldAttributes));
+                            formField.append($('<input/>', {id: fieldAttributes.field, type: 'hidden', name: fieldAttributes.name}));
+                            formField.append(cropper);
+                        } else {
+                            formField.append($('<' + tag + '/>', fieldAttributes));
+                        }
                         customFields.append(formField);
                     }
                     item.append(customFields);

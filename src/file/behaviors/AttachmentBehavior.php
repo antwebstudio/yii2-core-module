@@ -26,6 +26,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
 	public $captionAttribute = 'caption';
 	public $descriptionAttribute = 'description';
 	public $dataAttribute = 'data';
+	public $cropperAttribute = 'cropper';
     public $multiple = true;
 
     public $isRequired = false;
@@ -344,6 +345,7 @@ class AttachmentBehavior extends \trntv\filekit\behaviors\UploadBehavior {
             'caption' => $this->captionAttribute,
             'description' => $this->descriptionAttribute,
 			'data' => $this->dataAttribute,
+            'cropper' => $this->cropperAttribute,
         ];
 
         if ($this->attributePrefix !== null) {

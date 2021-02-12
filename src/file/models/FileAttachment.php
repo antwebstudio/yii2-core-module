@@ -85,13 +85,12 @@ class FileAttachment extends \yii\db\ActiveRecord
 		return File::isImageTypeMime($attachmentArray['type']);
 	}
 	
-	public static function generateThumbnail($url, $width = null, $height = null, $fitType = 'fit', $position = null) {
+	public static function generateThumbnail($url, $width = null, $height = null, $fitType = 'fit', $position = null, $width2 = null, $height2 = null) {
 		$notUrl = true;
 		if ($notUrl) {
 			$fullPathOrUrl = FileHelper::normalizePath(\Yii::$app->fileStorage->getFilesystem()->getAdapter()->applyPathPrefix($url));
 		}
-		
-		$savePath = self::getThumbnailPath($url, $width, $height, $fitType, $position);
+		$savePath = self::getThumbnailPath($url, $width, $height, $fitType, $position, $width2, $height2);
 		if (file_exists($savePath)) return $savePath;
 		 
 		try {
@@ -113,6 +112,13 @@ class FileAttachment extends \yii\db\ActiveRecord
 			$hRatio = $img->height() / $height;
 			$useRatio = min($wRatio, $hRatio);
 			$img->fit((int) ($img->width() / $useRatio), (int) ($img->height() / $useRatio))->crop($width, $height);
+		} else if ($fitType == 'crop-and-fit') {
+			$position = explode(',', $position);
+			if ($width && $height) $img->crop((int) $width, (int) $height, (int) $position[0], (int) $position[1]);
+			if ($width2 && $height2) $img->fit((int) $width2, (int) $height2);	
+		} else if ($fitType == 'crop') {
+			$position = explode(',', $position);
+			if ($width && $height) $img->{$fitType}((int) $width, (int) $height, (int) $position[0], (int) $position[1]);	
 		} else {
 			if ($width && $height) $img->{$fitType}($width, $height, null, $position);
 		}
@@ -131,24 +137,44 @@ class FileAttachment extends \yii\db\ActiveRecord
 		return $img;
 	}
 	
-	public static function getThumbnailPath($url, $width = null, $height = null, $fitType = null, $position = null) {
+	public static function getThumbnailPath($url, $width = null, $height = null, $fitType = null, $position = null, $width2 = null, $height2 = null) {
 		$thumbDir = (isset($width) ? $width : '') . 'x' . (isset($height) ? $height : '') . '/' . $fitType . '/' . $position; // Before calculation of width/ height
-		return FileHelper::normalizePath(\Yii::getAlias('@runtime/thumbCache/'.$thumbDir).$url);
+		if (isset($width2) || isset($height2)) $thumbDir .= '/'.(isset($width2) ? $width2 : '') . 'x' . (isset($height2) ? $height2 : '');
+		
+		return FileHelper::normalizePath(\Yii::getAlias('@runtime/thumbCache/'.$thumbDir).'/'.	$url);
 	}
 	
 	public static function thumb($attachmentArray, $width, $height = null, $fitType = 'fit', $position = null, $pathAttribute = 'path') { 
 		if (is_array($attachmentArray) && !isset($attachmentArray[$pathAttribute])) $attachmentArray = $attachmentArray[0];
 		
 		try {
-			self::generateThumbnail($attachmentArray['path'], $width, $height, $fitType, $position);
+			if (isset($attachmentArray['cropper'])) {
+				$cropper = json_decode($attachmentArray['cropper'], true);
+				$fitType = 'crop-and-fit';
+				$x = $cropper['x'];
+				$y = $cropper['y'];
+				$position = $x . ',' . $y;
+
+				$height2 = $width / $cropper['width'] * $cropper['height'];
+				$width2 = $width;
+
+				$width = (int) $cropper['width'];
+				$height = (int) $cropper['height'];
+			}
+
+			self::generateThumbnail($attachmentArray['path'], $width, $height, $fitType, $position, $width2 ?? null, $height2 ?? null);
 				
 			return Url::to(['/site/thumb', 
 				'url' => $attachmentArray['path'],
 				'width' => $width,
 				'height' => $height,
+				'width2' => $width2 ?? null,
+				'height2' => $height2 ?? null,
+				'position' => $position,
 				'fitType' => $fitType,
-			]);
+			], true);
 		} catch (\Exception $ex) {
+			// if (YII_DEBUG) throw $ex;
 		}
 		return self::getFirstUrl($attachmentArray);
 	}
@@ -204,7 +230,7 @@ class FileAttachment extends \yii\db\ActiveRecord
             [['path'], 'required'],
             [['order', 'size'], 'integer'],
             [['path', 'base_url', 'type', 'name'], 'string', 'max' => 255],
-			[['model', 'model_class_id', 'model_id', 'caption', 'description', 'data'], 'safe'],
+			[['model', 'model_class_id', 'model_id', 'caption', 'description', 'data', 'cropper'], 'safe'],
         ];
     }
 
