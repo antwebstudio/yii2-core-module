@@ -75,7 +75,11 @@ class DefaultController extends Controller
 		$categoryType = CategoryType::ensure($type);
         $searchModel = new CategorySearch(['type' => CategoryType::getIdFor($type)]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$dataProvider->pagination = false;
+		
+		// Pagination is canceled because multi page sorting UI is too complicated, but timeout and memory limit exceeded when the list is too long, so we use page size 200
+		$dataProvider->pagination = [
+            'pagesize' => 200,
+        ];
 
         return $this->render('index', [
             'type' => $type,
@@ -137,6 +141,7 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
 		// Category type should not be formModel name
 		//$this->module->configureModel($model, $model->type);
+		$categoryTypes = CategoryType::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('category', '{categoryType} is updated. ', [
@@ -147,6 +152,7 @@ class DefaultController extends Controller
             return $this->render('update', [
                 'model' => $model,
 				'showTypeField' => Yii::$app->request->get('showType', !isset($model->type)),
+				'categoryTypes' => ArrayHelper::map($categoryTypes, 'id', 'name'),
             ]);
         }
     }

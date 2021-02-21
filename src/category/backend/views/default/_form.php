@@ -74,7 +74,7 @@ $language = Yii::$app->request->post('language', Yii::$app->request->get('langua
         <?= $form->field($model, 'attachments')->widget(
             Upload::className(),
             [
-                'url' => ['image-upload', 'type' => 'attachments', 'category-type' => $model->type->id],
+                'url' => ['image-upload', 'type' => 'attachments', 'category-type' => $model->type->id ?? null],
                 'sortable' => true,
                 'maxFileSize' => 10000000, // 10 MiB
                 'maxNumberOfFiles' => 100,
@@ -87,7 +87,7 @@ $language = Yii::$app->request->post('language', Yii::$app->request->get('langua
         <?= $form->field($model, 'thumbnail')->widget(
             Upload::classname(),
             [
-                'url' => ['image-upload', 'type' => 'thumbnail', 'category-type' => $model->type->id],
+                'url' => ['image-upload', 'type' => 'thumbnail', 'category-type' => $model->type->id ?? null],
                 'sortable' => true,
                 'maxFileSize' => 10000000, // 10 MiB
                 'maxNumberOfFiles' => 1,
@@ -100,7 +100,7 @@ $language = Yii::$app->request->post('language', Yii::$app->request->get('langua
         <?= $form->field($model, 'banner')->widget(
             Upload::classname(),
             [
-                'url' => ['image-upload', 'type' => 'banner', 'category-type' => $model->type->id],
+                'url' => ['image-upload', 'type' => 'banner', 'category-type' => $model->type->id ?? null],
                 'sortable' => true,
                 'maxFileSize' => 10000000, // 10 MiB
                 'maxNumberOfFiles' => 1,
