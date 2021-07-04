@@ -92,6 +92,9 @@ class Category extends ActiveRecord
 	
 	public static function ensureRoot($type = 'default', $rootTitle = 'Uncategorized') {
 		$root = Category::find()->rootsOfType($type)->one();
+        if (!isset($root)) {
+            $root = Category::find()->type($type)->where(['slug' => 'uncategorized'])->one();
+        }
 		if (!isset($root)) {
 			$root = new self(['type_id' => CategoryType::getIdFor($type)]);
 			$root->title = $rootTitle;
