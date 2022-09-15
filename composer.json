@@ -33,11 +33,7 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-		{
-			"type": "composer",
-			"url": "https://packagist.antwebstudio.com"
-		}
+        }
 	],
 	"scripts": {
 		"post-install-cmd": "@setup",
@@ -59,5 +55,11 @@
 			"elFinderVolume\\": "src/file/adapters",
 			"tests\\" : "tests"
 		}
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "antweb/yii2-module-composer": true
+        }
     }
 }
